@@ -59,9 +59,10 @@ extern int yydebug;
     RBRAK = 269,
     SCRIPT = 270,
     OPENTAG = 271,
-    SEMICOLON = 272,
-    OPENPAREN = 273,
-    CLOSEPAREN = 274
+    CLOSETAG = 272,
+    SEMICOLON = 273,
+    OPENPAREN = 274,
+    CLOSEPAREN = 275
   };
 #endif
 /* Tokens.  */
@@ -79,9 +80,10 @@ extern int yydebug;
 #define RBRAK 269
 #define SCRIPT 270
 #define OPENTAG 271
-#define SEMICOLON 272
-#define OPENPAREN 273
-#define CLOSEPAREN 274
+#define CLOSETAG 272
+#define SEMICOLON 273
+#define OPENPAREN 274
+#define CLOSEPAREN 275
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

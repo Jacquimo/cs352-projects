@@ -16,9 +16,12 @@ closetag	: LBRAK SLASH SCRIPT RBRAK newlines
 
 statements	: statements statement
 			| statement
+			|
 			;
 
-statement	: action SEMICOLON newlines
+statement	: statement newlines
+			| action SEMICOLON
+			| action
 			;
 
 action		: assignment
@@ -28,7 +31,7 @@ assignment	: ID EQUAL expr
 			;
 
 expr		: OPENPAREN expr CLOSEPAREN
-			| expr operator term
+			| expr operator expr
 			| term
 			;
 
