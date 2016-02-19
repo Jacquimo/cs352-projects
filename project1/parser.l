@@ -15,19 +15,21 @@ opentag		"<script type=\"text/JavaScript\">"
 
 
 %%
-{opentag}			{return(OPENTAG);}
-"script"			{return(SCRIPT);}
-"+"					{return(PLUS);}
-"-"					{return(MINUS);}
-"/"					{return(SLASH);}
-"*"					{return(MULT);}
-"\n"				{return(NEWLINE);}
-"\""				{return(QUOTE);}
-"<"					{return(LBRAK);}
-">"					{return(RBRAK);}
-"="					{return(EQUAL);}
-";"					{return(SEMICOLON);}
-{id}				{return(ID);}
-{num}				{return(NUM);}
-{ws}				{}
+{opentag}		{return(OPENTAG);}
+"script"		{return(SCRIPT);}
+";"				{return(SEMICOLON);}
+"+"				{return(PLUS);}
+"-"				{return(MINUS);}
+"/"				{return(SLASH);}
+"*"				{return(MULT);}
+"\n"			{return(NEWLINE);}
+"\""			{return(QUOTE);}
+"<"				{return(LBRAK);}
+">"				{return(RBRAK);}
+"="				{return(EQUAL);}
+"("				{return(OPENPAREN);}
+")"				{return(CLOSEPAREN);}
+{id}			{return(ID);}
+{num}			{return(NUM);}
+{ws}			{}
 %%
