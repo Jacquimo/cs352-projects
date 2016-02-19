@@ -8,20 +8,20 @@ int yyerror(char*);
 %start script
 
 %%
-script		: OPENTAG newlines statements closetag newlines
+script		: OPENTAG emptySpace statements closetag emptySpace
         	;
 
-closetag	: LBRAK SLASH SCRIPT RBRAK newlines
+closetag	: emptySpace closetag
+			| LBRAK SLASH SCRIPT RBRAK
 			;
 
-statements	: statements statement
+statements	: statements newlines statements
+			| statements SEMICOLON statements
 			| statement
 			|
 			;
 
-statement	: statement newlines
-			| action SEMICOLON
-			| action
+statement	: action
 			;
 
 action		: assignment
@@ -46,6 +46,10 @@ operator	: PLUS
 			;
 
 newlines	: newlines NEWLINE
+			| NEWLINE
+			;
+
+emptySpace	: emptySpace NEWLINE
 			| NEWLINE
 			|
 			;

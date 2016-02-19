@@ -1,0 +1,6 @@
+<script type="text/JavaScript">
+
+
+cool = (5 * 5); stuff = cool / ((5 + (cool - 4)) * 2 )
+things = cool - stuff
+</script>
