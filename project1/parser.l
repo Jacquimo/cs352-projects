@@ -5,16 +5,29 @@
 %option yylineno
 
 /* regular definitions */
-delim   [ \t]
-ws      {delim}+
-letter  [A-Za-z]
-digit   [0-9]
-id      {letter}({letter}|{digit})*
-num     {digit}+
+delim		[ \t]
+ws			{delim}+
+letter		[A-Za-z]
+digit		[0-9]
+id			{letter}({letter}|{digit}|"_")*
+num			{digit}+
+opentag		"<script type=\"text/JavaScript\">"
+
 
 %%
-{id}                                    {return(ID);}
-{num}                                   {return(NUM);}
-"+"                                     {return(PLUS);}
-{ws}                                    {}
+{opentag}			{return(OPENTAG);}
+"script"			{return(SCRIPT);}
+"+"					{return(PLUS);}
+"-"					{return(MINUS);}
+"/"					{return(SLASH);}
+"*"					{return(MULT);}
+"\n"				{return(NEWLINE);}
+"\""				{return(QUOTE);}
+"<"					{return(LBRAK);}
+">"					{return(RBRAK);}
+"="					{return(EQUAL);}
+";"					{return(SEMICOLON);}
+{id}				{return(ID);}
+{num}				{return(NUM);}
+{ws}				{}
 %%

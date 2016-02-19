@@ -4,13 +4,24 @@ int yylex();
 int yyerror(char*);
 %}
 
-%token ASSIGN ID NUM PLUS
-%start exp
+%token ASSIGN ID NUM PLUS MINUS SLASH MULT EQUAL NEWLINE QUOTE LBRAK RBRAK SCRIPT OPENTAG SEMICOLON
+%start script
 
 %%
-exp     : exp PLUS NUM
-        | ID
-        ;
+script		: OPENTAG newlines statements closetag newlines
+        	;
+
+closetag	: LBRAK SLASH SCRIPT RBRAK newlines
+			;
+
+statements	: statements ID newlines
+			| ID newlines
+			;
+
+newlines	: newlines NEWLINE
+			| NEWLINE
+			|
+			;
 %%
 
 FILE *yyin;
@@ -36,6 +47,6 @@ int main(int argc, char *argv[])
             yyparse();
         }
     } else{
-        fprintf(stderr, "format: ./yacc_example [filename]");
+        fprintf(stderr, "format: ./parser [filename]");
     }
 }

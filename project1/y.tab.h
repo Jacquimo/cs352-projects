@@ -48,7 +48,18 @@ extern int yydebug;
     ASSIGN = 258,
     ID = 259,
     NUM = 260,
-    PLUS = 261
+    PLUS = 261,
+    MINUS = 262,
+    SLASH = 263,
+    MULT = 264,
+    EQUAL = 265,
+    NEWLINE = 266,
+    QUOTE = 267,
+    LBRAK = 268,
+    RBRAK = 269,
+    SCRIPT = 270,
+    OPENTAG = 271,
+    SEMICOLON = 272
   };
 #endif
 /* Tokens.  */
@@ -56,6 +67,17 @@ extern int yydebug;
 #define ID 259
 #define NUM 260
 #define PLUS 261
+#define MINUS 262
+#define SLASH 263
+#define MULT 264
+#define EQUAL 265
+#define NEWLINE 266
+#define QUOTE 267
+#define LBRAK 268
+#define RBRAK 269
+#define SCRIPT 270
+#define OPENTAG 271
+#define SEMICOLON 272
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
