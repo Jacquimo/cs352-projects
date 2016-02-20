@@ -16,9 +16,9 @@ closetag	: emptySpace closetag
 			| LBRAK SLASH SCRIPT RBRAK
 			;
 
-statements	: statements newlines statements
-			| statements SEMICOLON statements
-			| statements SEMICOLON newlines statements
+statements	: action SEMICOLON statements
+			| action newlines statements
+			| action SEMICOLON newlines statements
 			| action
 			|
 			;
