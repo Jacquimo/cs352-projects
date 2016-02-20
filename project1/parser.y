@@ -9,7 +9,7 @@ int yyerror(char*);
 %start script
 
 %%
-script		: OPENTAG emptySpace statements closetag emptySpace
+script		: OPENTAG newlines statements closetag emptySpace
         	;
 
 closetag	: emptySpace closetag
@@ -71,7 +71,7 @@ FILE *yyin;
 int yylineno;
 int yyerror(char *s)
 {
-    fprintf(stderr, "error: %s, line: %d\n", s, yylineno);
+    fprintf(stdout, "syntax error, line %d\n", yylineno);
 		return 0;
 }
 

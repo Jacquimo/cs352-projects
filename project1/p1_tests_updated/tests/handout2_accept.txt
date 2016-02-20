@@ -1,0 +1,7 @@
+<script type="text/JavaScript">
+
+document.write( 1 + "abc" );
+
+document.write( "abc" + 1 );
+
+</script>

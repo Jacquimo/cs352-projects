@@ -2,6 +2,6 @@
 var stuff = "Hello, \n world!";
 document.write(stuff, "foobar")
 
-cool = (5 * 5); stuff = cool / ((5 + (cool - 4)) * "dude" )
+cool = (5 * 5) stuff = cool / ((5 + (cool - 4)) * "dude" )
 things = cool - stuff
 </script>

@@ -1,0 +1,5 @@
+<script type="text/JavaScript">
+
+document.write( var num = 0; )
+
+</script>

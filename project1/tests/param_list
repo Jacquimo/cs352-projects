@@ -1,0 +1,4 @@
+<script type="text/JavaScript"> 
+document.write( (2 + (2 + 2)) );
+document.write( "string "  , 5 + 5 );
+</script>

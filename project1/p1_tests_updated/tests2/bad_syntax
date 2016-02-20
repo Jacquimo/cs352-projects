@@ -1,0 +1,6 @@
+<script type="text/JavaScript">
+var test;
+test = 2;
+
+bad syntax;
+</script>
