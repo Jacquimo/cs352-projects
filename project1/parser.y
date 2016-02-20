@@ -9,7 +9,7 @@ int yyerror(char*);
 %start script
 
 %%
-script		: OPENTAG newlines statements closetag emptySpace
+script		: OPENTAG emptySpace statements closetag emptySpace
         	;
 
 closetag	: emptySpace closetag
@@ -18,6 +18,7 @@ closetag	: emptySpace closetag
 
 statements	: statements newlines statements
 			| statements SEMICOLON statements
+			| statements SEMICOLON newlines statements
 			| action
 			|
 			;
@@ -36,8 +37,8 @@ assignment	: ID EQUAL expr
 docwrite	: DOCWRITE OPENPAREN paramList CLOSEPAREN
 			;
 
-paramList	: paramList COMMA term
-			| term
+paramList	: paramList COMMA expr
+			| expr
 			|
 			;
 
@@ -83,13 +84,13 @@ int main(int argc, char *argv[])
 
         file = fopen(argv[1], "r");
         if (!file) {
-            fprintf(stderr, "could not open %s\n", argv[1]);
+            fprintf(stdout, "could not open %s\n", argv[1]);
         } else{
             yyin = file;
             //yyparse() will call yylex()
             yyparse();
         }
     } else{
-        fprintf(stderr, "format: ./parser [filename]");
+        fprintf(stdout, "format: ./parser [filename]");
     }
 }

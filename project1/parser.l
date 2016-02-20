@@ -12,7 +12,7 @@ digit		[0-9]
 id			{letter}({letter}|{digit}|"_")*
 num			{digit}+
 opentag		"<script type=\"text/JavaScript\">"
-string		\"(\\.|[^\"\n])*\"
+string		\"(\\.|[^\"\n:])*\"
 docwrite	"document.write"
 
 
