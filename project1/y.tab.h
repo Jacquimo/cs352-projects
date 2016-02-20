@@ -54,7 +54,7 @@ extern int yydebug;
     MULT = 264,
     EQUAL = 265,
     NEWLINE = 266,
-    QUOTE = 267,
+    STRING = 267,
     LBRAK = 268,
     RBRAK = 269,
     SCRIPT = 270,
@@ -62,7 +62,9 @@ extern int yydebug;
     SEMICOLON = 272,
     OPENPAREN = 273,
     CLOSEPAREN = 274,
-    VAR = 275
+    VAR = 275,
+    DOCWRITE = 276,
+    COMMA = 277
   };
 #endif
 /* Tokens.  */
@@ -75,7 +77,7 @@ extern int yydebug;
 #define MULT 264
 #define EQUAL 265
 #define NEWLINE 266
-#define QUOTE 267
+#define STRING 267
 #define LBRAK 268
 #define RBRAK 269
 #define SCRIPT 270
@@ -84,6 +86,8 @@ extern int yydebug;
 #define OPENPAREN 273
 #define CLOSEPAREN 274
 #define VAR 275
+#define DOCWRITE 276
+#define COMMA 277
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

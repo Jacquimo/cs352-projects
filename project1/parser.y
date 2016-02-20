@@ -4,7 +4,8 @@ int yylex();
 int yyerror(char*);
 %}
 
-%token ASSIGN ID NUM PLUS MINUS SLASH MULT EQUAL NEWLINE QUOTE LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR
+%token ASSIGN ID NUM PLUS MINUS SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA
+
 %start script
 
 %%
@@ -23,12 +24,21 @@ statements	: statements newlines statements
 
 action		: declaration
 			| assignment
+			| docwrite
 			;
 
 declaration	: VAR assignment
 			;
 
 assignment	: ID EQUAL expr
+			;
+
+docwrite	: DOCWRITE OPENPAREN paramList CLOSEPAREN
+			;
+
+paramList	: paramList COMMA term
+			| term
+			|
 			;
 
 expr		: OPENPAREN expr CLOSEPAREN
@@ -38,6 +48,7 @@ expr		: OPENPAREN expr CLOSEPAREN
 
 term		: NUM
 			| ID
+			| STRING
 			;
 
 operator	: PLUS
