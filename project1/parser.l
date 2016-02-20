@@ -17,6 +17,7 @@ opentag		"<script type=\"text/JavaScript\">"
 %%
 {opentag}		{return(OPENTAG);}
 "script"		{return(SCRIPT);}
+"var"			{return(VAR);}
 ";"				{return(SEMICOLON);}
 "+"				{return(PLUS);}
 "-"				{return(MINUS);}

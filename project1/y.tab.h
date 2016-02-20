@@ -61,7 +61,8 @@ extern int yydebug;
     OPENTAG = 271,
     SEMICOLON = 272,
     OPENPAREN = 273,
-    CLOSEPAREN = 274
+    CLOSEPAREN = 274,
+    VAR = 275
   };
 #endif
 /* Tokens.  */
@@ -82,6 +83,7 @@ extern int yydebug;
 #define SEMICOLON 272
 #define OPENPAREN 273
 #define CLOSEPAREN 274
+#define VAR 275
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

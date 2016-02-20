@@ -1,5 +1,5 @@
 <script type="text/JavaScript">
-
+var stuff = 5;
 
 cool = (5 * 5); stuff = cool / ((5 + (cool - 4)) * 2 )
 things = cool - stuff
