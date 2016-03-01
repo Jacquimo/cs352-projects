@@ -64,7 +64,10 @@ extern int yydebug;
     CLOSEPAREN = 274,
     VAR = 275,
     DOCWRITE = 276,
-    COMMA = 277
+    COMMA = 277,
+    COLON = 278,
+    OPENCURL = 279,
+    CLOSECURL = 280
   };
 #endif
 /* Tokens.  */
@@ -88,6 +91,9 @@ extern int yydebug;
 #define VAR 275
 #define DOCWRITE 276
 #define COMMA 277
+#define COLON 278
+#define OPENCURL 279
+#define CLOSECURL 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

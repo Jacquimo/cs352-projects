@@ -8,7 +8,7 @@ document.write(result)
 document.write(linebreak)
 
 
-result = ten * ten 
+result = ten * ten
 document.write("ten * ten = ", result)
 document.write(linebreak);
 
@@ -18,5 +18,11 @@ document.write(result)
 var ID; ID = result;
 document.write(linebreak)
 document.write(ID)
+
+var person = {
+lastName:”Lincoln”, firstName,
+
+age: 150, eyeColor: "blue"+”grey”
+}
 
 </script>

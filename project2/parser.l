@@ -33,6 +33,9 @@ docwrite	"document.write"
 "="				{return(EQUAL);}
 "("				{return(OPENPAREN);}
 ")"				{return(CLOSEPAREN);}
+":"				{return(COLON);}
+"{"				{return(OPENCURL);}
+"}"				{return(CLOSECURL);}
 {string}		{return(STRING);}
 {id}			{return(ID);}
 {num}			{return(NUM);}
