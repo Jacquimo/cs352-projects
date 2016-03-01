@@ -7,8 +7,7 @@ var result = two + ten
 document.write(result)
 document.write(linebreak)
 
-
-result = ten * ten 
+result = ten * ten
 document.write("ten * ten = ", result)
 document.write(linebreak);
 
