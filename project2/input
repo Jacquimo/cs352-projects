@@ -20,9 +20,9 @@ document.write(linebreak)
 document.write(ID)
 
 var person = {
-lastName:”Lincoln”, firstName,
+lastName:"Lincoln", firstName,
 
-age: 150, eyeColor: "blue"+”grey”
+age: 150, eyeColor: "blue"+"grey"
 }
 
 </script>

@@ -39,11 +39,7 @@ result		: expr
 			| objdec
 			;
 
-objdec		: object newlines
-			| object SEMICOLON newlines
-			;
-
-object		: VAR ID EQUAL OPENCURL newlines fieldlist emptySpace CLOSECURL
+objdec		: OPENCURL newlines fieldlist emptySpace CLOSECURL
 			;
 
 fieldlist	: fieldlist COMMA emptySpace field
