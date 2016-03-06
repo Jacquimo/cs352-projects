@@ -67,7 +67,8 @@ extern int yydebug;
     COMMA = 277,
     COLON = 278,
     OPENCURL = 279,
-    CLOSECURL = 280
+    CLOSECURL = 280,
+    DOT = 281
   };
 #endif
 /* Tokens.  */
@@ -94,6 +95,7 @@ extern int yydebug;
 #define COLON 278
 #define OPENCURL 279
 #define CLOSECURL 280
+#define DOT 281
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

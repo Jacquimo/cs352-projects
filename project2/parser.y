@@ -4,7 +4,7 @@ int yylex();
 int yyerror(char*);
 %}
 
-%token ASSIGN ID NUM PLUS MINUS SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL
+%token ASSIGN ID NUM PLUS MINUS SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
 
 %start script
 
@@ -31,8 +31,12 @@ action		: declaration
 declaration	: VAR ID
 			| VAR assignment
 			;
+			
+assignment	: varId EQUAL result
+			;
 
-assignment	: ID EQUAL result
+varId		: varId DOT ID
+			| ID
 			;
 
 result		: expr
