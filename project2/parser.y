@@ -212,7 +212,7 @@ sum			: sum smallOp sum
 					val->string_val = (char*)concatVal.c_str();
 					$$ = *val;
 
-				} else {
+				} else if (streq($1.type, WORD_INT)) {
 					int first = $1.int_val;
 					int sec = $3.int_val;
 					int result = 0;
@@ -234,6 +234,9 @@ sum			: sum smallOp sum
 
 					if (VERBOSE)
 						printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *($2), result);
+						
+				} else {
+					typeError("Unknown variable type. Likely programmer error.");
 				}
 			}
 			| factor
