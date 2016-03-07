@@ -28,6 +28,7 @@ struct Value {
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <typeinfo>
 using namespace std;
 
 int yylex();
@@ -39,9 +40,9 @@ int yyerror(char*);
  */
 
 // Constant Values and Basic Functions (defined with preprocessor directives)
-#define stringLiteral "string"
-#define intString "int"
-#define noType "none"
+#define WORD_STRING "string"
+#define WORD_INT "int"
+#define WORD_NO_TYPE "none"
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -64,19 +65,19 @@ struct VariableInstance {
 	Value value;
 
 	VariableInstance(char* val) {
-		this->value.type = stringLiteral;
+		this->value.type = WORD_STRING;
 		this->scope = scopeLevel;
 		this->value.string_val = val;
 	}
 
 	VariableInstance(int val) {
-		this->value.type = intString;
+		this->value.type = WORD_INT;
 		this->scope = scopeLevel;
 		this->value.int_val = val;
 	}
 
 	VariableInstance() {
-		this->value.type = noType;
+		this->value.type = WORD_NO_TYPE;
 		this->scope = scopeLevel;
 	}
 };
@@ -201,7 +202,7 @@ factor		: factor bigOp factor
 term		: NUM
 			{
 				Value* val = new Value();
-				val->type = "int";
+				val->type = WORD_INT;
 				val->int_val = $1;
 				$$ = *val;
 			}
@@ -226,7 +227,7 @@ term		: NUM
 					}
 
 					// verify that variable instance has valid value
-					if (streq(var->value.type, noType))
+					if (streq(var->value.type, WORD_NO_TYPE))
 						typeError("Variable used before value assigned");
 
 					if (vec.empty())
@@ -235,9 +236,9 @@ term		: NUM
 					// the current instance has the tightest scope possible and has a value
 					Value* ret = new Value();
 					ret->type = var->value.type;
-					if (strcmp(var->value.type, noType) == 0)
+					if (strcmp(var->value.type, WORD_NO_TYPE) == 0)
 						typeError("Variable declared but never assigned.");
-					else if (strcmp(var->value.type, stringLiteral) == 0)
+					else if (strcmp(var->value.type, WORD_STRING) == 0)
 						ret->string_val = strdup(var->value.string_val);
 					else
 						ret->int_val = var->value.int_val;
@@ -248,7 +249,7 @@ term		: NUM
 			| STRING
 			{
 				Value* val = new Value();
-				val->type = "string";
+				val->type = WORD_STRING;
 				val->string_val = $1;
 				$$ = *val;
 			}
