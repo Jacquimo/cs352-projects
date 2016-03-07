@@ -43,12 +43,18 @@ docwrite	"document.write"
 "}"				{return(CLOSECURL);}
 "."				{return(DOT);}
 
-{string}		{return(STRING);}
+{string}		{
+					yylval.string_val = strdup(yytext);
+					return(STRING);
+				}
 
 {id}			{
-
+					yylval.string_val = strdup(yytext);
 					return(ID);
 				}
-{num}			{return(NUM);}
+{num}			{
+					yylval.number_val = atoi(yytext);
+					return(NUM);
+				}
 {ws}			{}
 %%

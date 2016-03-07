@@ -75,9 +75,9 @@ Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ASSIGN (258)
-ID (259) 10 13 14 20 31
-NUM (260) 30
+ID (258) 10 13 14 20 31
+NUM (259) 30
+ASSIGN (260)
 PLUS (261) 33
 MINUS (262) 34
 SLASH (263) 2 35

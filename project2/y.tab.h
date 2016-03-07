@@ -45,9 +45,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    ASSIGN = 258,
-    ID = 259,
-    NUM = 260,
+    ID = 258,
+    NUM = 259,
+    ASSIGN = 260,
     PLUS = 261,
     MINUS = 262,
     SLASH = 263,
@@ -72,9 +72,9 @@ extern int yydebug;
   };
 #endif
 /* Tokens.  */
-#define ASSIGN 258
-#define ID 259
-#define NUM 260
+#define ID 258
+#define NUM 259
+#define ASSIGN 260
 #define PLUS 261
 #define MINUS 262
 #define SLASH 263
@@ -99,7 +99,16 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE YYSTYPE;
+union YYSTYPE
+{
+#line 16 "parser.y" /* yacc.c:1915  */
+
+	char*	string_val;
+	int		number_val;
+
+#line 111 "y.tab.h" /* yacc.c:1915  */
+};
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
