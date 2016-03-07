@@ -1,5 +1,10 @@
+# Makefile for Miniscript language
+
+CC=g++
+CFLAGS= -g
+
 parser:y.tab.c lex.yy.c
-	g++ y.tab.c lex.yy.c -o parser -lfl
+	$(CC) $(CFLAGS) y.tab.c lex.yy.c -o parser -lfl
 y.tab.c: parser.y
 	bison -y -d -g -t --debug --verbose parser.y
 lex.yy.c: yacc_example_lex.l
