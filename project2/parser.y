@@ -187,10 +187,15 @@ sum			: sum smallOp sum
 			| factor
 			;
 
+/* "factor" rule has type Value */
 factor		: factor bigOp factor
 			| term
+			{
+				$$ = $1;
+			}
 			;
 
+/* "term" rule has type Value */
 term		: NUM
 			{
 				Value* val = new Value();
@@ -248,16 +253,22 @@ term		: NUM
 			;
 
 bigOp		: SLASH
+			{
+				$$ = $1;
+			}
 			| MULT
+			{
+				$$ = $1;
+			}
 			;
 
 smallOp		: PLUS
 			{
-				//$$ = $1
+				$$ = $1;
 			}
 			| MINUS
 			{
-				//$$ = $1
+				$$ = $1;
 			}
 			;
 
