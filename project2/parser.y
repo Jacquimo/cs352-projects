@@ -25,6 +25,7 @@ struct Value {
 %{
 // Include statements and necessary function prototypes
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -33,6 +34,7 @@ using namespace std;
 
 int yylex();
 int yyerror(char*);
+extern int yylineno;
 
 
 /*
@@ -43,6 +45,7 @@ int yyerror(char*);
 #define WORD_STRING "string"
 #define WORD_INT "int"
 #define WORD_NO_TYPE "none"
+#define WORD_TYPE_ERROR "type error"
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -87,11 +90,16 @@ typedef unordered_map <string, vector<VariableInstance> > SymbolTable;
 SymbolTable symbolTable;
 
 // Helper functions
-void typeError(char*) {
+void typeError(char* message) {
 	/* TODO: implement this function completely. This function should cause the
 	 * interpreter to end execution and therefore should never return to its
 	 * calling function.
 	*/
+
+	char buf[256];
+	buf[0] = 0;
+	sprintf(buf, "%s: %s - line %d\n", WORD_TYPE_ERROR, message, yylineno);
+	printf("%s", buf);
 }
 
 %}
@@ -190,7 +198,30 @@ sum			: sum smallOp sum
 /* "factor" rule has type Value */
 factor		: factor bigOp factor
 			{
+				// only integers can use the "*" and "/" operators
+				if (!streq($1.type, WORD_INT) || !streq($3.type, WORD_INT))
+					typeError("Improper operator for variable type.");
 
+				int first = $1.int_val;
+				int sec = $3.int_val;
+				int result = 0;
+
+				switch(*($2)) {
+					case '*':
+						result = first * sec;
+						break;
+
+					case '/':
+						result = first / sec;
+						break;
+				}
+
+				Value* ret = new Value(); // use new keyword to ensure variable doesn't lose scope
+				ret->type = WORD_INT;
+				ret->int_val = result;
+				$$ = *ret;
+
+				printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
 			}
 			| term
 			{
@@ -205,6 +236,9 @@ term		: NUM
 				val->type = WORD_INT;
 				val->int_val = $1;
 				$$ = *val;
+
+				// testing
+				//std::cout << "myint has type: " << typeid(val->int_val).name() << '\n';
 			}
 			| ID
 			{
@@ -252,6 +286,9 @@ term		: NUM
 				val->type = WORD_STRING;
 				val->string_val = $1;
 				$$ = *val;
+
+				// testing
+				//std::cout << "mystr has type: " << typeid(val->string_val).name() << '\n';
 			}
 			;
 
@@ -285,7 +322,6 @@ newlines	: newlines NEWLINE
 %%
 
 extern FILE *yyin;
-extern int yylineno;
 int yyerror(char *s)
 {
     fprintf(stdout, "syntax error, line %d\n", yylineno);

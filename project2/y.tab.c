@@ -192,6 +192,7 @@ int yyparse (void);
 
 // Include statements and necessary function prototypes
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -200,6 +201,7 @@ using namespace std;
 
 int yylex();
 int yyerror(char*);
+extern int yylineno;
 
 
 /*
@@ -210,6 +212,7 @@ int yyerror(char*);
 #define WORD_STRING "string"
 #define WORD_INT "int"
 #define WORD_NO_TYPE "none"
+#define WORD_TYPE_ERROR "type error"
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -254,15 +257,20 @@ typedef unordered_map <string, vector<VariableInstance> > SymbolTable;
 SymbolTable symbolTable;
 
 // Helper functions
-void typeError(char*) {
+void typeError(char* message) {
 	/* TODO: implement this function completely. This function should cause the
 	 * interpreter to end execution and therefore should never return to its
 	 * calling function.
 	*/
+
+	char buf[256];
+	buf[0] = 0;
+	sprintf(buf, "%s: %s - line %d\n", WORD_TYPE_ERROR, message, yylineno);
+	printf("%s", buf);
 }
 
 
-#line 266 "y.tab.c" /* yacc.c:358  */
+#line 274 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -543,11 +551,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   104,   104,   107,   110,   111,   114,   115,   118,   119,
-     120,   121,   125,   124,   130,   140,   143,   146,   147,   150,
-     151,   154,   157,   158,   161,   164,   165,   168,   171,   172,
-     173,   176,   180,   183,   187,   191,   195,   202,   209,   249,
-     258,   262,   268,   272,   278,   279,   282,   283
+       0,   112,   112,   115,   118,   119,   122,   123,   126,   127,
+     128,   129,   133,   132,   138,   148,   151,   154,   155,   158,
+     159,   162,   165,   166,   169,   172,   173,   176,   179,   180,
+     181,   184,   188,   191,   195,   199,   226,   233,   243,   283,
+     295,   299,   305,   309,   315,   316,   319,   320
 };
 #endif
 
@@ -1366,14 +1374,14 @@ yyreduce:
   switch (yyn)
     {
         case 12:
-#line 125 "parser.y" /* yacc.c:1661  */
+#line 133 "parser.y" /* yacc.c:1661  */
     {
 			}
-#line 1373 "y.tab.c" /* yacc.c:1661  */
+#line 1381 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 14:
-#line 131 "parser.y" /* yacc.c:1661  */
+#line 139 "parser.y" /* yacc.c:1661  */
     {
 				// Only reset symbol table entry if it has not been declared
 				if (symbolTable.find((yyvsp[0].string_val)) == symbolTable.end()) {
@@ -1383,54 +1391,80 @@ yyreduce:
 				}
 				//$$ = false; // if it's declared, there can't be a type error
 			}
-#line 1387 "y.tab.c" /* yacc.c:1661  */
-    break;
-
-  case 31:
-#line 177 "parser.y" /* yacc.c:1661  */
-    {
-
-			}
 #line 1395 "y.tab.c" /* yacc.c:1661  */
     break;
 
-  case 33:
-#line 184 "parser.y" /* yacc.c:1661  */
+  case 31:
+#line 185 "parser.y" /* yacc.c:1661  */
     {
-				//printf("test: \"%c\"", $2);
+
 			}
 #line 1403 "y.tab.c" /* yacc.c:1661  */
     break;
 
-  case 35:
+  case 33:
 #line 192 "parser.y" /* yacc.c:1661  */
     {
-
+				//printf("test: \"%c\"", $2);
 			}
 #line 1411 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 35:
+#line 200 "parser.y" /* yacc.c:1661  */
+    {
+				// only integers can use the "*" and "/" operators
+				if (!streq((yyvsp[-2].value).type, WORD_INT) || !streq((yyvsp[0].value).type, WORD_INT))
+					typeError("Improper operator for variable type.");
+
+				int first = (yyvsp[-2].value).int_val;
+				int sec = (yyvsp[0].value).int_val;
+				int result = 0;
+
+				switch(*((yyvsp[-1].string_val))) {
+					case '*':
+						result = first * sec;
+						break;
+
+					case '/':
+						result = first / sec;
+						break;
+				}
+
+				Value* ret = new Value(); // use new keyword to ensure variable doesn't lose scope
+				ret->type = WORD_INT;
+				ret->int_val = result;
+				(yyval.value) = *ret;
+
+				printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
+			}
+#line 1442 "y.tab.c" /* yacc.c:1661  */
+    break;
+
   case 36:
-#line 196 "parser.y" /* yacc.c:1661  */
+#line 227 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1419 "y.tab.c" /* yacc.c:1661  */
+#line 1450 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 37:
-#line 203 "parser.y" /* yacc.c:1661  */
+#line 234 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_INT;
 				val->int_val = (yyvsp[0].int_val);
 				(yyval.value) = *val;
+
+				// testing
+				//std::cout << "myint has type: " << typeid(val->int_val).name() << '\n';
 			}
-#line 1430 "y.tab.c" /* yacc.c:1661  */
+#line 1464 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 38:
-#line 210 "parser.y" /* yacc.c:1661  */
+#line 244 "parser.y" /* yacc.c:1661  */
     {
 				// This ID must represent an already assigned variable, or it's an error
 
@@ -1470,54 +1504,57 @@ yyreduce:
 					(yyval.value) = *ret;
 				}
 			}
-#line 1474 "y.tab.c" /* yacc.c:1661  */
+#line 1508 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 39:
-#line 250 "parser.y" /* yacc.c:1661  */
+#line 284 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_STRING;
 				val->string_val = (yyvsp[0].string_val);
 				(yyval.value) = *val;
+
+				// testing
+				//std::cout << "mystr has type: " << typeid(val->string_val).name() << '\n';
 			}
-#line 1485 "y.tab.c" /* yacc.c:1661  */
+#line 1522 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 40:
-#line 259 "parser.y" /* yacc.c:1661  */
+#line 296 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1493 "y.tab.c" /* yacc.c:1661  */
+#line 1530 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 41:
-#line 263 "parser.y" /* yacc.c:1661  */
+#line 300 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1501 "y.tab.c" /* yacc.c:1661  */
+#line 1538 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 42:
-#line 269 "parser.y" /* yacc.c:1661  */
+#line 306 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1509 "y.tab.c" /* yacc.c:1661  */
+#line 1546 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 43:
-#line 273 "parser.y" /* yacc.c:1661  */
+#line 310 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1517 "y.tab.c" /* yacc.c:1661  */
+#line 1554 "y.tab.c" /* yacc.c:1661  */
     break;
 
 
-#line 1521 "y.tab.c" /* yacc.c:1661  */
+#line 1558 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1745,11 +1782,10 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 285 "parser.y" /* yacc.c:1906  */
+#line 322 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;
-extern int yylineno;
 int yyerror(char *s)
 {
     fprintf(stdout, "syntax error, line %d\n", yylineno);

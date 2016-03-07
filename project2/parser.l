@@ -28,10 +28,24 @@ docwrite	"document.write"
 "var"			{return(VAR);}
 ","				{return(COMMA);}
 ";"				{return(SEMICOLON);}
-"+"				{return(PLUS);}
-"-"				{return(MINUS);}
-"/"				{return(SLASH);}
-"*"				{return(MULT);}
+
+"+"				{
+					yylval.string_val = strdup(yytext);
+					return(PLUS);
+				}
+"-"				{
+					yylval.string_val = strdup(yytext);
+					return(MINUS);
+					}
+"/"				{
+					yylval.string_val = strdup(yytext);
+					return(SLASH);
+				}
+"*"				{
+					yylval.string_val = strdup(yytext);
+					return(MULT);
+				}
+
 "\n"			{return(NEWLINE);}
 "<"				{return(LBRAK);}
 ">"				{return(RBRAK);}
