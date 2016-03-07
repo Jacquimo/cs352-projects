@@ -16,6 +16,15 @@ document.write("ten / two = ")
 result = ten / two
 document.write(result)
 var ID; ID = result;
+
+{
+
+
+	var ID = "hello";
+
+
+}
+
 document.write(linebreak)
 document.write(ID)
 
@@ -23,6 +32,6 @@ var person = {
 lastName:"Lincoln", firstName,
 
 age: 150, eyeColor: "blue"+"grey"
-}
+};
 
 </script>

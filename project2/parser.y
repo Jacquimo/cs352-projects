@@ -38,6 +38,10 @@ delimiter	: newlines
 action		: declaration
 			| assignment
 			| docwrite
+			| scopeChange
+			;
+
+scopeChange	: OPENCURL newlines statements CLOSECURL
 			;
 
 declaration	: VAR ID
