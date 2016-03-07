@@ -98,7 +98,7 @@ void typeError(char* message) {
 
 	char buf[256];
 	buf[0] = 0;
-	sprintf(buf, "%s: %s - line %d\n", WORD_TYPE_ERROR, message, yylineno);
+	sprintf(buf, "%s: %s | line %d\n", WORD_TYPE_ERROR, message, yylineno);
 	printf("%s", buf);
 }
 
@@ -192,7 +192,46 @@ expr		: OPENPAREN expr CLOSEPAREN
 /* "sum" rule has type Value */
 sum			: sum smallOp sum
 			{
-				//printf("test: \"%c\"", $2);
+				// check that types are the same
+				if (!streq($1.type, $3.type))
+					typeError("Variables must be of the same type.");
+
+				// check that if it's a string, it must use '+' operator
+				if (streq($1.type, WORD_STRING)) {
+					if (!streq($2, "+"))
+						typeError("Strings can only use the '+' operator.");
+
+					string concatVal = *(new string($1.string_val)) + *(new string ($3.string_val));
+					//printf("string: %s\n", concatVal.c_str());
+
+					// return the Value object to a higher grammar rule
+					Value* val = new Value();
+					val->type = WORD_STRING;
+					val->string_val = (char*)concatVal.c_str();
+					$$ = *val;
+
+				} else {
+					int first = $1.int_val;
+					int sec = $3.int_val;
+					int result = 0;
+
+					switch(*($2)) {
+						case '+':
+							result = first + sec;
+							break;
+
+						case '-':
+							result = first - sec;
+							break;
+					}
+
+					Value* ret = new Value(); // use new keyword to ensure variable doesn't lose scope
+					ret->type = WORD_INT;
+					ret->int_val = result;
+					$$ = *ret;
+
+					printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
+				}
 			}
 			| factor
 			{

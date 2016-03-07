@@ -58,7 +58,11 @@ docwrite	"document.write"
 "."				{return(DOT);}
 
 {string}		{
+					// remove quotation marks from string value
 					yylval.string_val = strdup(yytext);
+					yylval.string_val++;
+					yylval.string_val[strlen(yylval.string_val)-1] = 0;
+					
 					return(STRING);
 				}
 

@@ -929,13 +929,17 @@ case 21:
 YY_RULE_SETUP
 #line 60 "parser.l"
 {
+					// remove quotation marks from string value
 					yylval.string_val = strdup(yytext);
+					yylval.string_val++;
+					yylval.string_val[strlen(yylval.string_val)-1] = 0;
+					
 					return(STRING);
 				}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 65 "parser.l"
+#line 69 "parser.l"
 {
 					yylval.string_val = strdup(yytext);
 					return(ID);
@@ -943,7 +947,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 69 "parser.l"
+#line 73 "parser.l"
 {
 					yylval.int_val = atoi(yytext);
 					return(NUM);
@@ -951,15 +955,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 73 "parser.l"
+#line 77 "parser.l"
 {}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 74 "parser.l"
+#line 78 "parser.l"
 ECHO;
 	YY_BREAK
-#line 963 "lex.yy.c"
+#line 967 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1968,7 +1972,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 74 "parser.l"
+#line 78 "parser.l"
 
 
 

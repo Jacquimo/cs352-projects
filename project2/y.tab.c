@@ -265,7 +265,7 @@ void typeError(char* message) {
 
 	char buf[256];
 	buf[0] = 0;
-	sprintf(buf, "%s: %s - line %d\n", WORD_TYPE_ERROR, message, yylineno);
+	sprintf(buf, "%s: %s | line %d\n", WORD_TYPE_ERROR, message, yylineno);
 	printf("%s", buf);
 }
 
@@ -554,8 +554,8 @@ static const yytype_uint16 yyrline[] =
        0,   112,   112,   115,   118,   119,   122,   123,   126,   127,
      128,   129,   133,   132,   138,   148,   151,   154,   155,   158,
      159,   162,   165,   166,   169,   172,   173,   176,   179,   180,
-     181,   184,   188,   191,   195,   199,   226,   233,   243,   283,
-     295,   299,   305,   309,   315,   316,   319,   320
+     181,   185,   189,   193,   236,   243,   270,   277,   287,   327,
+     340,   344,   351,   355,   362,   363,   367,   368
 };
 #endif
 
@@ -1395,7 +1395,7 @@ yyreduce:
     break;
 
   case 31:
-#line 185 "parser.y" /* yacc.c:1661  */
+#line 186 "parser.y" /* yacc.c:1661  */
     {
 
 			}
@@ -1403,15 +1403,62 @@ yyreduce:
     break;
 
   case 33:
-#line 192 "parser.y" /* yacc.c:1661  */
+#line 194 "parser.y" /* yacc.c:1661  */
     {
-				//printf("test: \"%c\"", $2);
+				// check that types are the same
+				if (!streq((yyvsp[-2].value).type, (yyvsp[0].value).type))
+					typeError("Variables must be of the same type.");
+
+				// check that if it's a string, it must use '+' operator
+				if (streq((yyvsp[-2].value).type, WORD_STRING)) {
+					if (!streq((yyvsp[-1].string_val), "+"))
+						typeError("Strings can only use the '+' operator.");
+
+					string concatVal = *(new string((yyvsp[-2].value).string_val)) + *(new string ((yyvsp[0].value).string_val));
+					//printf("string: %s\n", concatVal.c_str());
+
+					// return the Value object to a higher grammar rule
+					Value* val = new Value();
+					val->type = WORD_STRING;
+					val->string_val = (char*)concatVal.c_str();
+					(yyval.value) = *val;
+
+				} else {
+					int first = (yyvsp[-2].value).int_val;
+					int sec = (yyvsp[0].value).int_val;
+					int result = 0;
+
+					switch(*((yyvsp[-1].string_val))) {
+						case '+':
+							result = first + sec;
+							break;
+
+						case '-':
+							result = first - sec;
+							break;
+					}
+
+					Value* ret = new Value(); // use new keyword to ensure variable doesn't lose scope
+					ret->type = WORD_INT;
+					ret->int_val = result;
+					(yyval.value) = *ret;
+
+					printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
+				}
 			}
-#line 1411 "y.tab.c" /* yacc.c:1661  */
+#line 1450 "y.tab.c" /* yacc.c:1661  */
+    break;
+
+  case 34:
+#line 237 "parser.y" /* yacc.c:1661  */
+    {
+				(yyval.value) = (yyvsp[0].value);
+			}
+#line 1458 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 35:
-#line 200 "parser.y" /* yacc.c:1661  */
+#line 244 "parser.y" /* yacc.c:1661  */
     {
 				// only integers can use the "*" and "/" operators
 				if (!streq((yyvsp[-2].value).type, WORD_INT) || !streq((yyvsp[0].value).type, WORD_INT))
@@ -1438,19 +1485,19 @@ yyreduce:
 
 				printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
 			}
-#line 1442 "y.tab.c" /* yacc.c:1661  */
+#line 1489 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 36:
-#line 227 "parser.y" /* yacc.c:1661  */
+#line 271 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1450 "y.tab.c" /* yacc.c:1661  */
+#line 1497 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 37:
-#line 234 "parser.y" /* yacc.c:1661  */
+#line 278 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_INT;
@@ -1460,11 +1507,11 @@ yyreduce:
 				// testing
 				//std::cout << "myint has type: " << typeid(val->int_val).name() << '\n';
 			}
-#line 1464 "y.tab.c" /* yacc.c:1661  */
+#line 1511 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 38:
-#line 244 "parser.y" /* yacc.c:1661  */
+#line 288 "parser.y" /* yacc.c:1661  */
     {
 				// This ID must represent an already assigned variable, or it's an error
 
@@ -1504,11 +1551,11 @@ yyreduce:
 					(yyval.value) = *ret;
 				}
 			}
-#line 1508 "y.tab.c" /* yacc.c:1661  */
+#line 1555 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 39:
-#line 284 "parser.y" /* yacc.c:1661  */
+#line 328 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_STRING;
@@ -1518,43 +1565,43 @@ yyreduce:
 				// testing
 				//std::cout << "mystr has type: " << typeid(val->string_val).name() << '\n';
 			}
-#line 1522 "y.tab.c" /* yacc.c:1661  */
+#line 1569 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 40:
-#line 296 "parser.y" /* yacc.c:1661  */
+#line 341 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1530 "y.tab.c" /* yacc.c:1661  */
+#line 1577 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 41:
-#line 300 "parser.y" /* yacc.c:1661  */
+#line 345 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1538 "y.tab.c" /* yacc.c:1661  */
+#line 1585 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 42:
-#line 306 "parser.y" /* yacc.c:1661  */
+#line 352 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1546 "y.tab.c" /* yacc.c:1661  */
+#line 1593 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 43:
-#line 310 "parser.y" /* yacc.c:1661  */
+#line 356 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1554 "y.tab.c" /* yacc.c:1661  */
+#line 1601 "y.tab.c" /* yacc.c:1661  */
     break;
 
 
-#line 1558 "y.tab.c" /* yacc.c:1661  */
+#line 1605 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1782,7 +1829,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 322 "parser.y" /* yacc.c:1906  */
+#line 370 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;

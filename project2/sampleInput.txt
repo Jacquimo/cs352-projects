@@ -1,5 +1,5 @@
 <script type="text/JavaScript">
 
-var hello = 10 * "5";
+var hello = 10 + 5683;
 
 </script>
