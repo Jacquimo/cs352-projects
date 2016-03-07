@@ -47,6 +47,8 @@ extern int yylineno;
 #define WORD_NO_TYPE "none"
 #define WORD_TYPE_ERROR "type error"
 
+#define VERBOSE true
+
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
 
@@ -230,7 +232,8 @@ sum			: sum smallOp sum
 					ret->int_val = result;
 					$$ = *ret;
 
-					printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
+					if (VERBOSE)
+						printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *($2), result);
 				}
 			}
 			| factor
@@ -265,7 +268,8 @@ factor		: factor bigOp factor
 				ret->int_val = result;
 				$$ = *ret;
 
-				printf("First = %d\tSecond = %d\tResult = %d\n", first, sec, result);
+				if (VERBOSE)
+					printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *($2), result);
 			}
 			| term
 			{
@@ -280,9 +284,6 @@ term		: NUM
 				val->type = WORD_INT;
 				val->int_val = $1;
 				$$ = *val;
-
-				// testing
-				//std::cout << "myint has type: " << typeid(val->int_val).name() << '\n';
 			}
 			| ID
 			{
@@ -330,9 +331,6 @@ term		: NUM
 				val->type = WORD_STRING;
 				val->string_val = $1;
 				$$ = *val;
-
-				// testing
-				//std::cout << "mystr has type: " << typeid(val->string_val).name() << '\n';
 			}
 			;
 
