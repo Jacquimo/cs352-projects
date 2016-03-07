@@ -1,3 +1,24 @@
+%code requires {
+union Value {
+	char* string_val;
+	int int_val;
+};
+
+}
+
+%token <int_val> NUM
+%token <string_val> ID PLUS MINUS ASSIGN SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
+
+%type <Value> expr sum factor term
+%type <string_val> bigOp smallOp emptySpace newlines
+
+%union {
+	char* string_val;
+	int int_val;
+	Value value;
+}
+
+
 %{
 #include <stdio.h>
 #include <string>
@@ -15,26 +36,25 @@ int scopeLevel = 1;
 #define intString "int"
 #define noType "none"
 
+
+
 // Class that represents an instantiated variable and its value based on scope
 class VariableInstance {
 	public:
 		char* type;
 		int scope;
-		union {
-			char* string_val;
-			int int_val;
-		};
+		Value value;
 
 		VariableInstance(char* val) {
 			this->type = stringLiteral;
 			this->scope = scopeLevel;
-			this->string_val = val;
+			this->value.string_val = val;
 		}
 
 		VariableInstance(int val) {
 			this->type = intString;
 			this->scope = scopeLevel;
-			this->int_val = val;
+			this->value.int_val = val;
 		}
 
 		VariableInstance() {
@@ -66,15 +86,6 @@ int eval(int first, int sec, char* op) {
 unordered_map <string, vector<VariableInstance> > symbolTable;
 
 %}
-
-%token <string_val> ID
-%token <number_val> NUM
-%token ASSIGN PLUS MINUS SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
-
-%union {
-	char*	string_val;
-	int		number_val;
-}
 
 %start script
 
@@ -156,6 +167,9 @@ expr		: OPENPAREN expr CLOSEPAREN
 			;
 
 sum			: sum smallOp sum
+			{
+				//printf("test: \"%c\"", $2);
+			}
 			| factor
 			;
 
@@ -173,7 +187,13 @@ bigOp		: SLASH
 			;
 
 smallOp		: PLUS
+			{
+				//$$ = $1
+			}
 			| MINUS
+			{
+				//$$ = $1
+			}
 			;
 
 emptySpace	: newlines

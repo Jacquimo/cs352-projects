@@ -933,7 +933,7 @@ case 23:
 YY_RULE_SETUP
 #line 55 "parser.l"
 {
-					yylval.number_val = atoi(yytext);
+					yylval.int_val = atoi(yytext);
 					return(NUM);
 				}
 	YY_BREAK

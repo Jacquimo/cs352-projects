@@ -39,17 +39,27 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "parser.y" /* yacc.c:1915  */
+
+union Value {
+	char* string_val;
+	int int_val;
+};
+
+
+#line 52 "y.tab.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    ID = 258,
-    NUM = 259,
-    ASSIGN = 260,
-    PLUS = 261,
-    MINUS = 262,
+    NUM = 258,
+    ID = 259,
+    PLUS = 260,
+    MINUS = 261,
+    ASSIGN = 262,
     SLASH = 263,
     MULT = 264,
     EQUAL = 265,
@@ -72,11 +82,11 @@ extern int yydebug;
   };
 #endif
 /* Tokens.  */
-#define ID 258
-#define NUM 259
-#define ASSIGN 260
-#define PLUS 261
-#define MINUS 262
+#define NUM 258
+#define ID 259
+#define PLUS 260
+#define MINUS 261
+#define ASSIGN 262
 #define SLASH 263
 #define MULT 264
 #define EQUAL 265
@@ -102,12 +112,13 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 74 "parser.y" /* yacc.c:1915  */
+#line 15 "parser.y" /* yacc.c:1915  */
 
-	char*	string_val;
-	int		number_val;
+	char* string_val;
+	int int_val;
+	Value value;
 
-#line 111 "y.tab.h" /* yacc.c:1915  */
+#line 122 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

@@ -87,11 +87,11 @@ Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ID (258) 13 16 17 23 37
-NUM (259) 36
-ASSIGN (260)
-PLUS (261) 41
-MINUS (262) 42
+NUM (258) 36
+ID (259) 13 16 17 23 37
+PLUS (260) 41
+MINUS (261) 42
+ASSIGN (262)
 SLASH (263) 2 39
 MULT (264) 40
 EQUAL (265) 15
@@ -360,8 +360,8 @@ State 21
 
    26 docwrite: DOCWRITE OPENPAREN . paramList CLOSEPAREN
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
@@ -451,8 +451,8 @@ State 28
 
    15 assignment: varId EQUAL . result
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
     OPENCURL   shift, and go to state 44
@@ -474,16 +474,16 @@ State 29
 
 State 30
 
-   37 term: ID .
+   36 term: NUM .
 
-    $default  reduce using rule 37 (term)
+    $default  reduce using rule 36 (term)
 
 
 State 31
 
-   36 term: NUM .
+   37 term: ID .
 
-    $default  reduce using rule 36 (term)
+    $default  reduce using rule 37 (term)
 
 
 State 32
@@ -497,8 +497,8 @@ State 33
 
    30 expr: OPENPAREN . expr CLOSEPAREN
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
@@ -660,8 +660,8 @@ State 51
 
    27 paramList: paramList COMMA . expr
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
@@ -689,8 +689,8 @@ State 54
 
    32 sum: sum smallOp . sum
 
-    ID      shift, and go to state 30
-    NUM     shift, and go to state 31
+    NUM     shift, and go to state 30
+    ID      shift, and go to state 31
     STRING  shift, and go to state 32
 
     sum     go to state 63
@@ -716,8 +716,8 @@ State 57
 
    34 factor: factor bigOp . factor
 
-    ID      shift, and go to state 30
-    NUM     shift, and go to state 31
+    NUM     shift, and go to state 30
+    ID      shift, and go to state 31
     STRING  shift, and go to state 32
 
     factor  go to state 64
@@ -844,8 +844,8 @@ State 70
 
    24 fieldAssign: COLON . expr
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 

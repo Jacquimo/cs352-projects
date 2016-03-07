@@ -53,7 +53,7 @@ docwrite	"document.write"
 					return(ID);
 				}
 {num}			{
-					yylval.number_val = atoi(yytext);
+					yylval.int_val = atoi(yytext);
 					return(NUM);
 				}
 {ws}			{}
