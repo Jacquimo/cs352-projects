@@ -7,6 +7,35 @@ using namespace std;
 
 int yylex();
 int yyerror(char*);
+
+// Global Variables
+int scopeLevel = 1;
+
+// Class that represents an instantiated variable and its value based on scope
+class VariableInstance {
+	public:
+		char* type;
+		int scope;
+		union {
+			char* string_val;
+			int int_val;
+		};
+
+		VariableInstance(char* val) {
+			this->type = "string";
+			this->scope = scopeLevel;
+			this->string_val = val;
+		}
+
+		VariableInstance(int val) {
+			this->type = "int";
+			this->scope = scopeLevel;
+			this->int_val = val;
+		}
+};
+
+unordered_map <string, vector<VariableInstance> > symbolTable;
+
 %}
 
 %token <string_val> ID
@@ -41,10 +70,16 @@ action		: declaration
 			| scopeChange
 			;
 
-scopeChange	: OPENCURL newlines statements CLOSECURL
+scopeChange	: OPENCURL newlines
+ 			{
+			}
+			statements CLOSECURL
 			;
 
 declaration	: VAR ID
+			{
+				//VariableInstance* instance = new VariableInstance
+			}
 			| VAR assignment
 			;
 
