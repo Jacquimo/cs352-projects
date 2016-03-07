@@ -23,56 +23,76 @@ struct Value {
 
 
 %{
+// Include statements and necessary function prototypes
 #include <stdio.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <typeinfo>
 using namespace std;
 
 int yylex();
 int yyerror(char*);
 
-// Global Variables
-int scopeLevel = 1;
 
+/*
+ * Global Variables, Constants, and Data Structures
+ */
+
+// Constant Values and Basic Functions (defined with preprocessor directives)
 #define stringLiteral "string"
 #define intString "int"
 #define noType "none"
 
+// value arbitrarily chosen; more nested scope has larger value
+#define OUTER_SCOPE 1
 
+// determines if 2 c language strings are equal
+#define streq(A, B) (strcmp(A, B) == 0)
 
+// Global Variables
+/*
+ * Global scope of the compiler. The most outer scope has the smallest value
+ * and is denoted with the OUTER_SCOPE constant. A scope is said to be more
+ * nested than another scope if it has a larger scope value.
+ */
+int scopeLevel = OUTER_SCOPE;
+
+// Data Structures
 // Class that represents an instantiated variable and its value based on scope
 class VariableInstance {
-	public:
-		int scope;
-		Value value;
+public:
+	int scope;
+	Value value;
 
-		VariableInstance(char* val) {
-			this->value.type = stringLiteral;
-			this->scope = scopeLevel;
-			this->value.string_val = val;
-		}
+	VariableInstance(char* val) {
+		this->value.type = stringLiteral;
+		this->scope = scopeLevel;
+		this->value.string_val = val;
+	}
 
-		VariableInstance(int val) {
-			this->value.type = intString;
-			this->scope = scopeLevel;
-			this->value.int_val = val;
-		}
+	VariableInstance(int val) {
+		this->value.type = intString;
+		this->scope = scopeLevel;
+		this->value.int_val = val;
+	}
 
-		VariableInstance() {
-			this->value.type = noType;
-			this->scope = scopeLevel;
-		}
+	VariableInstance() {
+		this->value.type = noType;
+		this->scope = scopeLevel;
+	}
 };
+
+// declaring type of symbol table and initializing as global variable
+typedef unordered_map <string, vector<VariableInstance> > SymbolTable;
+SymbolTable symbolTable;
 
 // Helper functions
 void typeError(char*) {
-	// TODO: implement this function completely
+	/* TODO: implement this function completely. This function should cause the
+	 * interpreter to end execution and therefore should never return to its
+	 * calling function.
+	*/
 }
-
-typedef unordered_map <string, vector<VariableInstance> > SymbolTable;
-SymbolTable symbolTable;
 
 %}
 
@@ -180,7 +200,7 @@ term		: NUM
 			}
 			| ID
 			{
-				// This ID must represent an assigned variable, or it's an error
+				// This ID must represent an already assigned variable, or it's an error
 
 				if (symbolTable.find($1) == symbolTable.end() || symbolTable.at($1).empty()) {
 					typeError("Variable used before it is declared.");
@@ -198,10 +218,14 @@ term		: NUM
 						}
 					}
 
+					// verify that variable instance has valid value
+					if (streq(var->value.type, noType))
+						typeError("Variable used before value assigned");
+
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
 
-					// the current instance has the tightest scope possible
+					// the current instance has the tightest scope possible and has a value
 					Value* ret = new Value();
 					ret->type = var->value.type;
 					if (strcmp(var->value.type, noType) == 0)
