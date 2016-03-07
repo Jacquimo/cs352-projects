@@ -1,6 +1,10 @@
 %{
-#include<stdio.h>
+#include <stdio.h>
 #include <string>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
 int yylex();
 int yyerror(char*);
 %}

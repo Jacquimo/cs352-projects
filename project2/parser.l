@@ -1,5 +1,10 @@
 %{
-#include"y.tab.h"
+#include "y.tab.h"
+
+#include <string>
+#include <unordered_map>
+#include <vector>
+using namespace std;
 %}
 
 %option yylineno
@@ -37,8 +42,13 @@ docwrite	"document.write"
 "{"				{return(OPENCURL);}
 "}"				{return(CLOSECURL);}
 "."				{return(DOT);}
+
 {string}		{return(STRING);}
-{id}			{return(ID);}
+
+{id}			{
+
+					return(ID);
+				}
 {num}			{return(NUM);}
 {ws}			{}
 %%

@@ -7,7 +7,7 @@ parser:y.tab.c lex.yy.c
 	$(CC) $(CFLAGS) y.tab.c lex.yy.c -o parser -lfl
 y.tab.c: parser.y
 	bison -y -d -g -t --debug --verbose parser.y
-lex.yy.c: yacc_example_lex.l
+lex.yy.c: parser.l
 	lex parser.l
 
 clean:
