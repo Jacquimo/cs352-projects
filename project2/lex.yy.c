@@ -916,11 +916,14 @@ YY_RULE_SETUP
 case 21:
 YY_RULE_SETUP
 #line 46 "parser.l"
-{return(STRING);}
+{
+					yylval.string_val = strdup(yytext);
+					return(STRING);
+				}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 48 "parser.l"
+#line 51 "parser.l"
 {
 					yylval.string_val = strdup(yytext);
 					return(ID);
@@ -928,7 +931,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 52 "parser.l"
+#line 55 "parser.l"
 {
 					yylval.number_val = atoi(yytext);
 					return(NUM);
@@ -936,15 +939,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 56 "parser.l"
+#line 59 "parser.l"
 {}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 57 "parser.l"
+#line 60 "parser.l"
 ECHO;
 	YY_BREAK
-#line 948 "lex.yy.c"
+#line 951 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1953,7 +1956,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 57 "parser.l"
+#line 60 "parser.l"
 
 
 
