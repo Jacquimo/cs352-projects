@@ -11,6 +11,10 @@ int yyerror(char*);
 // Global Variables
 int scopeLevel = 1;
 
+#define stringLiteral "string"
+#define intString "int"
+#define noType "none"
+
 // Class that represents an instantiated variable and its value based on scope
 class VariableInstance {
 	public:
@@ -22,15 +26,20 @@ class VariableInstance {
 		};
 
 		VariableInstance(char* val) {
-			this->type = "string";
+			this->type = stringLiteral;
 			this->scope = scopeLevel;
 			this->string_val = val;
 		}
 
 		VariableInstance(int val) {
-			this->type = "int";
+			this->type = intString;
 			this->scope = scopeLevel;
 			this->int_val = val;
+		}
+
+		VariableInstance() {
+			this->type = noType;
+			this->scope = scopeLevel;
 		}
 };
 
@@ -78,7 +87,12 @@ scopeChange	: OPENCURL newlines
 
 declaration	: VAR ID
 			{
-				//VariableInstance* instance = new VariableInstance
+				// Only reset symbol table entry if it has not been declared
+				if (symbolTable.find($2) == symbolTable.end()) {
+					vector<VariableInstance> vec;
+					vec.push_back(*(new VariableInstance()));
+					symbolTable[$2] = vec;
+				}
 			}
 			| VAR assignment
 			;

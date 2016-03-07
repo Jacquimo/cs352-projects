@@ -76,6 +76,10 @@ int yyerror(char*);
 // Global Variables
 int scopeLevel = 1;
 
+#define stringLiteral "string"
+#define intString "int"
+#define noType "none"
+
 // Class that represents an instantiated variable and its value based on scope
 class VariableInstance {
 	public:
@@ -87,22 +91,27 @@ class VariableInstance {
 		};
 
 		VariableInstance(char* val) {
-			this->type = "string";
+			this->type = stringLiteral;
 			this->scope = scopeLevel;
 			this->string_val = val;
 		}
 
 		VariableInstance(int val) {
-			this->type = "int";
+			this->type = intString;
 			this->scope = scopeLevel;
 			this->int_val = val;
+		}
+
+		VariableInstance() {
+			this->type = noType;
+			this->scope = scopeLevel;
 		}
 };
 
 unordered_map <string, vector<VariableInstance> > symbolTable;
 
 
-#line 106 "y.tab.c" /* yacc.c:339  */
+#line 115 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -194,12 +203,12 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 45 "parser.y" /* yacc.c:355  */
+#line 54 "parser.y" /* yacc.c:355  */
 
 	char*	string_val;
 	int		number_val;
 
-#line 203 "y.tab.c" /* yacc.c:355  */
+#line 212 "y.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -214,7 +223,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 218 "y.tab.c" /* yacc.c:358  */
+#line 227 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -495,11 +504,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    56,    59,    60,    63,    64,    67,    68,
-      69,    70,    74,    73,    79,    83,    86,    89,    90,    93,
-      94,    97,   100,   101,   104,   107,   108,   111,   114,   115,
-     116,   119,   120,   121,   124,   125,   126,   129,   130,   131,
-     132,   135,   136,   139,   140
+       0,    62,    62,    65,    68,    69,    72,    73,    76,    77,
+      78,    79,    83,    82,    88,    97,   100,   103,   104,   107,
+     108,   111,   114,   115,   118,   121,   122,   125,   128,   129,
+     130,   133,   134,   135,   138,   139,   140,   143,   144,   145,
+     146,   149,   150,   153,   154
 };
 #endif
 
@@ -1318,22 +1327,27 @@ yyreduce:
   switch (yyn)
     {
         case 12:
-#line 74 "parser.y" /* yacc.c:1661  */
+#line 83 "parser.y" /* yacc.c:1661  */
     {
 			}
-#line 1325 "y.tab.c" /* yacc.c:1661  */
+#line 1334 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 14:
-#line 80 "parser.y" /* yacc.c:1661  */
+#line 89 "parser.y" /* yacc.c:1661  */
     {
-				//VariableInstance* instance = new VariableInstance
+				// Only reset symbol table entry if it has not been declared
+				if (symbolTable.find((yyvsp[0].string_val)) == symbolTable.end()) {
+					vector<VariableInstance> vec;
+					vec.push_back(*(new VariableInstance()));
+					symbolTable[(yyvsp[0].string_val)] = vec;
+				}
 			}
-#line 1333 "y.tab.c" /* yacc.c:1661  */
+#line 1347 "y.tab.c" /* yacc.c:1661  */
     break;
 
 
-#line 1337 "y.tab.c" /* yacc.c:1661  */
+#line 1351 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1561,7 +1575,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 142 "parser.y" /* yacc.c:1906  */
+#line 156 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;
