@@ -59,8 +59,7 @@ int scopeLevel = OUTER_SCOPE;
 
 // Data Structures
 // Class that represents an instantiated variable and its value based on scope
-class VariableInstance {
-public:
+struct VariableInstance {
 	int scope;
 	Value value;
 
@@ -189,6 +188,9 @@ sum			: sum smallOp sum
 
 /* "factor" rule has type Value */
 factor		: factor bigOp factor
+			{
+
+			}
 			| term
 			{
 				$$ = $1;
