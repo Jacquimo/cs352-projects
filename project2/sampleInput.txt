@@ -2,5 +2,6 @@
 
 
 var hello = 60 / 5 + 10 * 5683;
+document.write("hello\n ", "<br />", "world ", "dude" + "bro ", (70 * 8 + 4))
 
 </script>

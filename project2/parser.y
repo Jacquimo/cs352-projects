@@ -46,14 +46,30 @@ extern int yylineno;
 #define WORD_INT "int"
 #define WORD_NO_TYPE "none"
 #define WORD_TYPE_ERROR "type error"
+#define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
+#define BREAKLINE "<br />"
 
-#define VERBOSE true
+#define VERBOSE false
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
 
 // determines if 2 c language strings are equal
 #define streq(A, B) (strcmp(A, B) == 0)
+
+// performs the "write" semantic action of document.write
+#define writeToDoc(X) 	{\
+							if (streq((X).type, WORD_STRING)) {\
+								if (streq((X).string_val, BREAKLINE))\
+									printf("\n");\
+								else\
+									printf("%s", (X).string_val);\
+							}\
+							else if (streq((X).type, WORD_INT))\
+								printf("%d", (X).int_val);\
+							else\
+								typeError(UNKNOWN_TYPE_EXPL);\
+						}
 
 // Global Variables
 /*
@@ -179,7 +195,13 @@ docwrite	: DOCWRITE OPENPAREN paramList CLOSEPAREN
 			;
 
 paramList	: paramList COMMA expr
+			{
+				writeToDoc($3);
+			}
 			| expr
+			{
+				writeToDoc($1);
+			}
 			|
 			;
 
@@ -239,7 +261,7 @@ sum			: sum smallOp sum
 						printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *($2), result);
 
 				} else {
-					typeError("Unknown variable type. Likely programmer error.");
+					typeError(UNKNOWN_TYPE_EXPL);
 				}
 			}
 			| factor
