@@ -181,6 +181,7 @@ paramList	: paramList COMMA expr
 			|
 			;
 
+/* "expr" rule has type Value */
 expr		: OPENPAREN expr CLOSEPAREN
 			{
 
@@ -188,11 +189,15 @@ expr		: OPENPAREN expr CLOSEPAREN
 			| sum
 			;
 
+/* "sum" rule has type Value */
 sum			: sum smallOp sum
 			{
 				//printf("test: \"%c\"", $2);
 			}
 			| factor
+			{
+				$$ = $1;
+			}
 			;
 
 /* "factor" rule has type Value */
@@ -292,6 +297,7 @@ term		: NUM
 			}
 			;
 
+/* "bigOp" rule has type char* (String) */
 bigOp		: SLASH
 			{
 				$$ = $1;
@@ -302,6 +308,7 @@ bigOp		: SLASH
 			}
 			;
 
+/* "smallOp" rule has type char* (String) */
 smallOp		: PLUS
 			{
 				$$ = $1;
@@ -312,10 +319,12 @@ smallOp		: PLUS
 			}
 			;
 
+/* "emptySpace" rule has type char* (String) */
 emptySpace	: newlines
 			|
 			;
 
+/* "newlines" rule has type char* (String) */
 newlines	: newlines NEWLINE
 			| NEWLINE
 			;
