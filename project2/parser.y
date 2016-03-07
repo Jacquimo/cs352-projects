@@ -186,9 +186,12 @@ paramList	: paramList COMMA expr
 /* "expr" rule has type Value */
 expr		: OPENPAREN expr CLOSEPAREN
 			{
-
+				$$ = $2;
 			}
 			| sum
+			{
+				$$ = $1;
+			}
 			;
 
 /* "sum" rule has type Value */

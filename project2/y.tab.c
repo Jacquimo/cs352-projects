@@ -556,8 +556,8 @@ static const yytype_uint16 yyrline[] =
        0,   114,   114,   117,   120,   121,   124,   125,   128,   129,
      130,   131,   135,   134,   140,   150,   153,   156,   157,   160,
      161,   164,   167,   168,   171,   174,   175,   178,   181,   182,
-     183,   187,   191,   195,   242,   249,   277,   284,   291,   331,
-     341,   345,   352,   356,   363,   364,   368,   369
+     183,   187,   191,   198,   245,   252,   280,   287,   294,   334,
+     344,   348,   355,   359,   366,   367,   371,   372
 };
 #endif
 
@@ -1399,13 +1399,21 @@ yyreduce:
   case 31:
 #line 188 "parser.y" /* yacc.c:1661  */
     {
-
+				(yyval.value) = (yyvsp[-1].value);
 			}
 #line 1405 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 32:
+#line 192 "parser.y" /* yacc.c:1661  */
+    {
+				(yyval.value) = (yyvsp[0].value);
+			}
+#line 1413 "y.tab.c" /* yacc.c:1661  */
+    break;
+
   case 33:
-#line 196 "parser.y" /* yacc.c:1661  */
+#line 199 "parser.y" /* yacc.c:1661  */
     {
 				// check that types are the same
 				if (!streq((yyvsp[-2].value).type, (yyvsp[0].value).type))
@@ -1452,19 +1460,19 @@ yyreduce:
 					typeError("Unknown variable type. Likely programmer error.");
 				}
 			}
-#line 1456 "y.tab.c" /* yacc.c:1661  */
-    break;
-
-  case 34:
-#line 243 "parser.y" /* yacc.c:1661  */
-    {
-				(yyval.value) = (yyvsp[0].value);
-			}
 #line 1464 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 34:
+#line 246 "parser.y" /* yacc.c:1661  */
+    {
+				(yyval.value) = (yyvsp[0].value);
+			}
+#line 1472 "y.tab.c" /* yacc.c:1661  */
+    break;
+
   case 35:
-#line 250 "parser.y" /* yacc.c:1661  */
+#line 253 "parser.y" /* yacc.c:1661  */
     {
 				// only integers can use the "*" and "/" operators
 				if (!streq((yyvsp[-2].value).type, WORD_INT) || !streq((yyvsp[0].value).type, WORD_INT))
@@ -1492,30 +1500,30 @@ yyreduce:
 				if (VERBOSE)
 					printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *((yyvsp[-1].string_val)), result);
 			}
-#line 1496 "y.tab.c" /* yacc.c:1661  */
-    break;
-
-  case 36:
-#line 278 "parser.y" /* yacc.c:1661  */
-    {
-				(yyval.value) = (yyvsp[0].value);
-			}
 #line 1504 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 36:
+#line 281 "parser.y" /* yacc.c:1661  */
+    {
+				(yyval.value) = (yyvsp[0].value);
+			}
+#line 1512 "y.tab.c" /* yacc.c:1661  */
+    break;
+
   case 37:
-#line 285 "parser.y" /* yacc.c:1661  */
+#line 288 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_INT;
 				val->int_val = (yyvsp[0].int_val);
 				(yyval.value) = *val;
 			}
-#line 1515 "y.tab.c" /* yacc.c:1661  */
+#line 1523 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 38:
-#line 292 "parser.y" /* yacc.c:1661  */
+#line 295 "parser.y" /* yacc.c:1661  */
     {
 				// This ID must represent an already assigned variable, or it's an error
 
@@ -1555,54 +1563,54 @@ yyreduce:
 					(yyval.value) = *ret;
 				}
 			}
-#line 1559 "y.tab.c" /* yacc.c:1661  */
+#line 1567 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 39:
-#line 332 "parser.y" /* yacc.c:1661  */
+#line 335 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_STRING;
 				val->string_val = (yyvsp[0].string_val);
 				(yyval.value) = *val;
 			}
-#line 1570 "y.tab.c" /* yacc.c:1661  */
-    break;
-
-  case 40:
-#line 342 "parser.y" /* yacc.c:1661  */
-    {
-				(yyval.string_val) = (yyvsp[0].string_val);
-			}
 #line 1578 "y.tab.c" /* yacc.c:1661  */
     break;
 
-  case 41:
-#line 346 "parser.y" /* yacc.c:1661  */
+  case 40:
+#line 345 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
 #line 1586 "y.tab.c" /* yacc.c:1661  */
     break;
 
-  case 42:
-#line 353 "parser.y" /* yacc.c:1661  */
+  case 41:
+#line 349 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
 #line 1594 "y.tab.c" /* yacc.c:1661  */
     break;
 
-  case 43:
-#line 357 "parser.y" /* yacc.c:1661  */
+  case 42:
+#line 356 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
 #line 1602 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 43:
+#line 360 "parser.y" /* yacc.c:1661  */
+    {
+				(yyval.string_val) = (yyvsp[0].string_val);
+			}
+#line 1610 "y.tab.c" /* yacc.c:1661  */
+    break;
 
-#line 1606 "y.tab.c" /* yacc.c:1661  */
+
+#line 1614 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1830,7 +1838,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 371 "parser.y" /* yacc.c:1906  */
+#line 374 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;
