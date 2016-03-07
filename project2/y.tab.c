@@ -1447,7 +1447,7 @@ yyreduce:
 
 					if (VERBOSE)
 						printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *((yyvsp[-1].string_val)), result);
-						
+
 				} else {
 					typeError("Unknown variable type. Likely programmer error.");
 				}

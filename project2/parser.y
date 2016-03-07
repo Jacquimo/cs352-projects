@@ -234,7 +234,7 @@ sum			: sum smallOp sum
 
 					if (VERBOSE)
 						printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *($2), result);
-						
+
 				} else {
 					typeError("Unknown variable type. Likely programmer error.");
 				}
