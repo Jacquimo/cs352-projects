@@ -3,7 +3,8 @@ Terminals unused in grammar
    ASSIGN
 
 
-State 60 conflicts: 4 shift/reduce
+State 63 conflicts: 2 shift/reduce
+State 64 conflicts: 2 shift/reduce
 
 
 Grammar
@@ -57,39 +58,45 @@ Grammar
    29          | %empty
 
    30 expr: OPENPAREN expr CLOSEPAREN
-   31     | expr operator expr
-   32     | term
+   31     | sum
 
-   33 term: NUM
-   34     | ID
-   35     | STRING
+   32 sum: sum smallOp sum
+   33    | factor
 
-   36 operator: PLUS
-   37         | MINUS
-   38         | SLASH
-   39         | MULT
+   34 factor: factor bigOp factor
+   35       | term
 
-   40 emptySpace: newlines
-   41           | %empty
+   36 term: NUM
+   37     | ID
+   38     | STRING
 
-   42 newlines: newlines NEWLINE
-   43         | NEWLINE
+   39 bigOp: SLASH
+   40      | MULT
+
+   41 smallOp: PLUS
+   42        | MINUS
+
+   43 emptySpace: newlines
+   44           | %empty
+
+   45 newlines: newlines NEWLINE
+   46         | NEWLINE
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-ID (258) 13 16 17 23 34
-NUM (259) 33
+ID (258) 13 16 17 23 37
+NUM (259) 36
 ASSIGN (260)
-PLUS (261) 36
-MINUS (262) 37
-SLASH (263) 2 38
-MULT (264) 39
+PLUS (261) 41
+MINUS (262) 42
+SLASH (263) 2 39
+MULT (264) 40
 EQUAL (265) 15
-NEWLINE (266) 42 43
-STRING (267) 35
+NEWLINE (266) 45 46
+STRING (267) 38
 LBRAK (268) 2
 RBRAK (269) 2
 SCRIPT (270) 2
@@ -145,15 +152,21 @@ docwrite (43)
 paramList (44)
     on left: 27 28 29, on right: 26 27
 expr (45)
-    on left: 30 31 32, on right: 18 24 27 28 30 31
-term (46)
-    on left: 33 34 35, on right: 32
-operator (47)
-    on left: 36 37 38 39, on right: 31
-emptySpace (48)
-    on left: 40 41, on right: 1 6 20 21
-newlines (49)
-    on left: 42 43, on right: 5 12 20 40 42
+    on left: 30 31, on right: 18 24 27 28 30
+sum (46)
+    on left: 32 33, on right: 31 32
+factor (47)
+    on left: 34 35, on right: 33 34
+term (48)
+    on left: 36 37 38, on right: 35
+bigOp (49)
+    on left: 39 40, on right: 34
+smallOp (50)
+    on left: 41 42, on right: 32
+emptySpace (51)
+    on left: 43 44, on right: 1 6 20 21
+newlines (52)
+    on left: 45 46, on right: 5 12 20 43 45
 
 
 State 0
@@ -171,7 +184,7 @@ State 1
 
     NEWLINE  shift, and go to state 3
 
-    $default  reduce using rule 41 (emptySpace)
+    $default  reduce using rule 44 (emptySpace)
 
     emptySpace  go to state 4
     newlines    go to state 5
@@ -186,9 +199,9 @@ State 2
 
 State 3
 
-   43 newlines: NEWLINE .
+   46 newlines: NEWLINE .
 
-    $default  reduce using rule 43 (newlines)
+    $default  reduce using rule 46 (newlines)
 
 
 State 4
@@ -213,12 +226,12 @@ State 4
 
 State 5
 
-   40 emptySpace: newlines .
-   42 newlines: newlines . NEWLINE
+   43 emptySpace: newlines .
+   45 newlines: newlines . NEWLINE
 
     NEWLINE  shift, and go to state 18
 
-    $default  reduce using rule 40 (emptySpace)
+    $default  reduce using rule 43 (emptySpace)
 
 
 State 6
@@ -321,9 +334,9 @@ State 17
 
 State 18
 
-   42 newlines: newlines NEWLINE .
+   45 newlines: newlines NEWLINE .
 
-    $default  reduce using rule 42 (newlines)
+    $default  reduce using rule 45 (newlines)
 
 
 State 19
@@ -356,26 +369,28 @@ State 21
 
     paramList  go to state 34
     expr       go to state 35
-    term       go to state 36
+    sum        go to state 36
+    factor     go to state 37
+    term       go to state 38
 
 
 State 22
 
    12 scopeChange: OPENCURL newlines . $@1 statements CLOSECURL
-   42 newlines: newlines . NEWLINE
+   45 newlines: newlines . NEWLINE
 
     NEWLINE  shift, and go to state 18
 
     $default  reduce using rule 11 ($@1)
 
-    $@1  go to state 37
+    $@1  go to state 39
 
 
 State 23
 
     2 closetag: LBRAK . SLASH SCRIPT RBRAK
 
-    SLASH  shift, and go to state 38
+    SLASH  shift, and go to state 40
 
 
 State 24
@@ -384,9 +399,9 @@ State 24
 
     NEWLINE  shift, and go to state 3
 
-    $default  reduce using rule 41 (emptySpace)
+    $default  reduce using rule 44 (emptySpace)
 
-    emptySpace  go to state 39
+    emptySpace  go to state 41
     newlines    go to state 5
 
 
@@ -396,9 +411,9 @@ State 25
 
     NEWLINE  shift, and go to state 3
 
-    $default  reduce using rule 41 (emptySpace)
+    $default  reduce using rule 44 (emptySpace)
 
-    emptySpace  go to state 40
+    emptySpace  go to state 42
     newlines    go to state 5
 
 
@@ -413,7 +428,7 @@ State 26
 
     $default  reduce using rule 4 (statements)
 
-    statements   go to state 41
+    statements   go to state 43
     action       go to state 12
     scopeChange  go to state 13
     declaration  go to state 14
@@ -425,7 +440,7 @@ State 26
 State 27
 
     5 delimiter: newlines .
-   42 newlines: newlines . NEWLINE
+   45 newlines: newlines . NEWLINE
 
     NEWLINE  shift, and go to state 18
 
@@ -440,40 +455,42 @@ State 28
     NUM        shift, and go to state 31
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
-    OPENCURL   shift, and go to state 42
+    OPENCURL   shift, and go to state 44
 
-    result  go to state 43
-    objdec  go to state 44
-    expr    go to state 45
-    term    go to state 36
+    result  go to state 45
+    objdec  go to state 46
+    expr    go to state 47
+    sum     go to state 36
+    factor  go to state 37
+    term    go to state 38
 
 
 State 29
 
    16 varId: varId DOT . ID
 
-    ID  shift, and go to state 46
+    ID  shift, and go to state 48
 
 
 State 30
 
-   34 term: ID .
+   37 term: ID .
 
-    $default  reduce using rule 34 (term)
+    $default  reduce using rule 37 (term)
 
 
 State 31
 
-   33 term: NUM .
+   36 term: NUM .
 
-    $default  reduce using rule 33 (term)
+    $default  reduce using rule 36 (term)
 
 
 State 32
 
-   35 term: STRING .
+   38 term: STRING .
 
-    $default  reduce using rule 35 (term)
+    $default  reduce using rule 38 (term)
 
 
 State 33
@@ -485,8 +502,10 @@ State 33
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
-    expr  go to state 47
-    term  go to state 36
+    expr    go to state 49
+    sum     go to state 36
+    factor  go to state 37
+    term    go to state 38
 
 
 State 34
@@ -494,33 +513,51 @@ State 34
    26 docwrite: DOCWRITE OPENPAREN paramList . CLOSEPAREN
    27 paramList: paramList . COMMA expr
 
-    CLOSEPAREN  shift, and go to state 48
-    COMMA       shift, and go to state 49
+    CLOSEPAREN  shift, and go to state 50
+    COMMA       shift, and go to state 51
 
 
 State 35
 
    28 paramList: expr .
-   31 expr: expr . operator expr
-
-    PLUS   shift, and go to state 50
-    MINUS  shift, and go to state 51
-    SLASH  shift, and go to state 52
-    MULT   shift, and go to state 53
 
     $default  reduce using rule 28 (paramList)
-
-    operator  go to state 54
 
 
 State 36
 
-   32 expr: term .
+   31 expr: sum .
+   32 sum: sum . smallOp sum
 
-    $default  reduce using rule 32 (expr)
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
+
+    $default  reduce using rule 31 (expr)
+
+    smallOp  go to state 54
 
 
 State 37
+
+   33 sum: factor .
+   34 factor: factor . bigOp factor
+
+    SLASH  shift, and go to state 55
+    MULT   shift, and go to state 56
+
+    $default  reduce using rule 33 (sum)
+
+    bigOp  go to state 57
+
+
+State 38
+
+   35 factor: term .
+
+    $default  reduce using rule 35 (factor)
+
+
+State 39
 
    12 scopeChange: OPENCURL newlines $@1 . statements CLOSECURL
 
@@ -531,7 +568,7 @@ State 37
 
     $default  reduce using rule 4 (statements)
 
-    statements   go to state 55
+    statements   go to state 58
     action       go to state 12
     scopeChange  go to state 13
     declaration  go to state 14
@@ -540,101 +577,86 @@ State 37
     docwrite     go to state 17
 
 
-State 38
+State 40
 
     2 closetag: LBRAK SLASH . SCRIPT RBRAK
 
-    SCRIPT  shift, and go to state 56
+    SCRIPT  shift, and go to state 59
 
 
-State 39
+State 41
 
     1 script: OPENTAG emptySpace statements closetag emptySpace .
 
     $default  reduce using rule 1 (script)
 
 
-State 40
+State 42
 
     6 delimiter: SEMICOLON emptySpace .
 
     $default  reduce using rule 6 (delimiter)
 
 
-State 41
+State 43
 
     3 statements: action delimiter statements .
 
     $default  reduce using rule 3 (statements)
 
 
-State 42
+State 44
 
    20 objdec: OPENCURL . newlines fieldlist emptySpace CLOSECURL
 
     NEWLINE  shift, and go to state 3
 
-    newlines  go to state 57
+    newlines  go to state 60
 
 
-State 43
+State 45
 
    15 assignment: varId EQUAL result .
 
     $default  reduce using rule 15 (assignment)
 
 
-State 44
+State 46
 
    19 result: objdec .
 
     $default  reduce using rule 19 (result)
 
 
-State 45
+State 47
 
    18 result: expr .
-   31 expr: expr . operator expr
-
-    PLUS   shift, and go to state 50
-    MINUS  shift, and go to state 51
-    SLASH  shift, and go to state 52
-    MULT   shift, and go to state 53
 
     $default  reduce using rule 18 (result)
 
-    operator  go to state 54
 
-
-State 46
+State 48
 
    16 varId: varId DOT ID .
 
     $default  reduce using rule 16 (varId)
 
 
-State 47
+State 49
 
    30 expr: OPENPAREN expr . CLOSEPAREN
-   31     | expr . operator expr
 
-    PLUS        shift, and go to state 50
-    MINUS       shift, and go to state 51
-    SLASH       shift, and go to state 52
-    MULT        shift, and go to state 53
-    CLOSEPAREN  shift, and go to state 58
-
-    operator  go to state 54
+    CLOSEPAREN  shift, and go to state 61
 
 
-State 48
+State 50
 
    26 docwrite: DOCWRITE OPENPAREN paramList CLOSEPAREN .
 
     $default  reduce using rule 26 (docwrite)
 
 
-State 49
+State 51
 
    27 paramList: paramList COMMA . expr
 
@@ -643,165 +665,182 @@ State 49
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
-    expr  go to state 59
-    term  go to state 36
-
-
-State 50
-
-   36 operator: PLUS .
-
-    $default  reduce using rule 36 (operator)
-
-
-State 51
-
-   37 operator: MINUS .
-
-    $default  reduce using rule 37 (operator)
+    expr    go to state 62
+    sum     go to state 36
+    factor  go to state 37
+    term    go to state 38
 
 
 State 52
 
-   38 operator: SLASH .
+   41 smallOp: PLUS .
 
-    $default  reduce using rule 38 (operator)
+    $default  reduce using rule 41 (smallOp)
 
 
 State 53
 
-   39 operator: MULT .
+   42 smallOp: MINUS .
 
-    $default  reduce using rule 39 (operator)
+    $default  reduce using rule 42 (smallOp)
 
 
 State 54
 
-   31 expr: expr operator . expr
+   32 sum: sum smallOp . sum
 
-    ID         shift, and go to state 30
-    NUM        shift, and go to state 31
-    STRING     shift, and go to state 32
-    OPENPAREN  shift, and go to state 33
+    ID      shift, and go to state 30
+    NUM     shift, and go to state 31
+    STRING  shift, and go to state 32
 
-    expr  go to state 60
-    term  go to state 36
+    sum     go to state 63
+    factor  go to state 37
+    term    go to state 38
 
 
 State 55
 
-   12 scopeChange: OPENCURL newlines $@1 statements . CLOSECURL
+   39 bigOp: SLASH .
 
-    CLOSECURL  shift, and go to state 61
+    $default  reduce using rule 39 (bigOp)
 
 
 State 56
 
-    2 closetag: LBRAK SLASH SCRIPT . RBRAK
+   40 bigOp: MULT .
 
-    RBRAK  shift, and go to state 62
+    $default  reduce using rule 40 (bigOp)
 
 
 State 57
 
-   20 objdec: OPENCURL newlines . fieldlist emptySpace CLOSECURL
-   42 newlines: newlines . NEWLINE
+   34 factor: factor bigOp . factor
 
-    ID       shift, and go to state 63
-    NEWLINE  shift, and go to state 18
+    ID      shift, and go to state 30
+    NUM     shift, and go to state 31
+    STRING  shift, and go to state 32
 
-    fieldlist  go to state 64
-    field      go to state 65
+    factor  go to state 64
+    term    go to state 38
 
 
 State 58
+
+   12 scopeChange: OPENCURL newlines $@1 statements . CLOSECURL
+
+    CLOSECURL  shift, and go to state 65
+
+
+State 59
+
+    2 closetag: LBRAK SLASH SCRIPT . RBRAK
+
+    RBRAK  shift, and go to state 66
+
+
+State 60
+
+   20 objdec: OPENCURL newlines . fieldlist emptySpace CLOSECURL
+   45 newlines: newlines . NEWLINE
+
+    ID       shift, and go to state 67
+    NEWLINE  shift, and go to state 18
+
+    fieldlist  go to state 68
+    field      go to state 69
+
+
+State 61
 
    30 expr: OPENPAREN expr CLOSEPAREN .
 
     $default  reduce using rule 30 (expr)
 
 
-State 59
+State 62
 
    27 paramList: paramList COMMA expr .
-   31 expr: expr . operator expr
-
-    PLUS   shift, and go to state 50
-    MINUS  shift, and go to state 51
-    SLASH  shift, and go to state 52
-    MULT   shift, and go to state 53
 
     $default  reduce using rule 27 (paramList)
 
-    operator  go to state 54
+
+State 63
+
+   32 sum: sum . smallOp sum
+   32    | sum smallOp sum .
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
+
+    PLUS      [reduce using rule 32 (sum)]
+    MINUS     [reduce using rule 32 (sum)]
+    $default  reduce using rule 32 (sum)
+
+    smallOp  go to state 54
 
 
-State 60
+State 64
 
-   31 expr: expr . operator expr
-   31     | expr operator expr .
+   34 factor: factor . bigOp factor
+   34       | factor bigOp factor .
 
-    PLUS   shift, and go to state 50
-    MINUS  shift, and go to state 51
-    SLASH  shift, and go to state 52
-    MULT   shift, and go to state 53
+    SLASH  shift, and go to state 55
+    MULT   shift, and go to state 56
 
-    PLUS      [reduce using rule 31 (expr)]
-    MINUS     [reduce using rule 31 (expr)]
-    SLASH     [reduce using rule 31 (expr)]
-    MULT      [reduce using rule 31 (expr)]
-    $default  reduce using rule 31 (expr)
+    SLASH     [reduce using rule 34 (factor)]
+    MULT      [reduce using rule 34 (factor)]
+    $default  reduce using rule 34 (factor)
 
-    operator  go to state 54
+    bigOp  go to state 57
 
 
-State 61
+State 65
 
    12 scopeChange: OPENCURL newlines $@1 statements CLOSECURL .
 
     $default  reduce using rule 12 (scopeChange)
 
 
-State 62
+State 66
 
     2 closetag: LBRAK SLASH SCRIPT RBRAK .
 
     $default  reduce using rule 2 (closetag)
 
 
-State 63
+State 67
 
    23 field: ID . fieldAssign
 
-    COLON  shift, and go to state 66
+    COLON  shift, and go to state 70
 
     $default  reduce using rule 25 (fieldAssign)
 
-    fieldAssign  go to state 67
+    fieldAssign  go to state 71
 
 
-State 64
+State 68
 
    20 objdec: OPENCURL newlines fieldlist . emptySpace CLOSECURL
    21 fieldlist: fieldlist . COMMA emptySpace field
 
     NEWLINE  shift, and go to state 3
-    COMMA    shift, and go to state 68
+    COMMA    shift, and go to state 72
 
-    $default  reduce using rule 41 (emptySpace)
+    $default  reduce using rule 44 (emptySpace)
 
-    emptySpace  go to state 69
+    emptySpace  go to state 73
     newlines    go to state 5
 
 
-State 65
+State 69
 
    22 fieldlist: field .
 
     $default  reduce using rule 22 (fieldlist)
 
 
-State 66
+State 70
 
    24 fieldAssign: COLON . expr
 
@@ -810,68 +849,62 @@ State 66
     STRING     shift, and go to state 32
     OPENPAREN  shift, and go to state 33
 
-    expr  go to state 70
-    term  go to state 36
+    expr    go to state 74
+    sum     go to state 36
+    factor  go to state 37
+    term    go to state 38
 
 
-State 67
+State 71
 
    23 field: ID fieldAssign .
 
     $default  reduce using rule 23 (field)
 
 
-State 68
+State 72
 
    21 fieldlist: fieldlist COMMA . emptySpace field
 
     NEWLINE  shift, and go to state 3
 
-    $default  reduce using rule 41 (emptySpace)
+    $default  reduce using rule 44 (emptySpace)
 
-    emptySpace  go to state 71
+    emptySpace  go to state 75
     newlines    go to state 5
 
 
-State 69
+State 73
 
    20 objdec: OPENCURL newlines fieldlist emptySpace . CLOSECURL
 
-    CLOSECURL  shift, and go to state 72
+    CLOSECURL  shift, and go to state 76
 
 
-State 70
+State 74
 
    24 fieldAssign: COLON expr .
-   31 expr: expr . operator expr
-
-    PLUS   shift, and go to state 50
-    MINUS  shift, and go to state 51
-    SLASH  shift, and go to state 52
-    MULT   shift, and go to state 53
 
     $default  reduce using rule 24 (fieldAssign)
 
-    operator  go to state 54
 
-
-State 71
+State 75
 
    21 fieldlist: fieldlist COMMA emptySpace . field
 
-    ID  shift, and go to state 63
+    ID  shift, and go to state 67
 
-    field  go to state 73
+    field  go to state 77
 
 
-State 72
+State 76
 
    20 objdec: OPENCURL newlines fieldlist emptySpace CLOSECURL .
 
     $default  reduce using rule 20 (objdec)
 
 
-State 73
+State 77
 
    21 fieldlist: fieldlist COMMA emptySpace field .
 

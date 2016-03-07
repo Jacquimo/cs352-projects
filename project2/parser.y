@@ -43,6 +43,26 @@ class VariableInstance {
 		}
 };
 
+// Helper functions
+void typeError(char*) {
+	// TODO: implement this function completely
+}
+
+/*
+int eval(int first, int sec, char* op) {
+	int ret = 0;
+	switch(*op) {
+		case '*':
+			ret = first * sec;
+			break;
+
+		case '/'
+	}
+
+	return ret;
+}
+*/
+
 unordered_map <string, vector<VariableInstance> > symbolTable;
 
 %}
@@ -93,6 +113,7 @@ declaration	: VAR ID
 					vec.push_back(*(new VariableInstance()));
 					symbolTable[$2] = vec;
 				}
+				//$$ = false; // if it's declared, there can't be a type error
 			}
 			| VAR assignment
 			;
@@ -131,7 +152,14 @@ paramList	: paramList COMMA expr
 			;
 
 expr		: OPENPAREN expr CLOSEPAREN
-			| expr operator expr
+			| sum
+			;
+
+sum			: sum smallOp sum
+			| factor
+			;
+
+factor		: factor bigOp factor
 			| term
 			;
 
@@ -140,10 +168,12 @@ term		: NUM
 			| STRING
 			;
 
-operator	: PLUS
-			| MINUS
-			| SLASH
+bigOp		: SLASH
 			| MULT
+			;
+
+smallOp		: PLUS
+			| MINUS
 			;
 
 emptySpace	: newlines
