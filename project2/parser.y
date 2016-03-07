@@ -12,7 +12,7 @@ struct Value {
 %token <int_val> NUM
 %token <string_val> ID PLUS MINUS ASSIGN SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
 
-%type <Value> expr sum factor term
+%type <value> expr sum factor term
 %type <string_val> bigOp smallOp emptySpace newlines
 
 %union {
@@ -71,7 +71,8 @@ void typeError(char*) {
 	// TODO: implement this function completely
 }
 
-unordered_map <string, vector<VariableInstance> > symbolTable;
+typedef unordered_map <string, vector<VariableInstance> > SymbolTable;
+SymbolTable symbolTable;
 
 %}
 
@@ -171,8 +172,55 @@ factor		: factor bigOp factor
 			;
 
 term		: NUM
+			{
+				Value* val = new Value();
+				val->type = "int";
+				val->int_val = $1;
+				$$ = *val;
+			}
 			| ID
+			{
+				// This ID must represent an assigned variable, or it's an error
+
+				if (symbolTable.find($1) == symbolTable.end() || symbolTable.at($1).empty()) {
+					typeError("Variable used before it is declared.");
+				}
+				else {
+					vector<VariableInstance> vec = symbolTable.at($1);
+					VariableInstance* var = NULL;
+
+					// find first variable instance with valid scope
+					while (var == NULL && !vec.empty()) {
+						var = &vec.back();
+						if (var->scope > scopeLevel) {
+							var = NULL;
+							vec.pop_back();
+						}
+					}
+
+					if (vec.empty())
+						typeError("Variable used outside of scope.");
+
+					// the current instance has the tightest scope possible
+					Value* ret = new Value();
+					ret->type = var->value.type;
+					if (strcmp(var->value.type, noType) == 0)
+						typeError("Variable declared but never assigned.");
+					else if (strcmp(var->value.type, stringLiteral) == 0)
+						ret->string_val = strdup(var->value.string_val);
+					else
+						ret->int_val = var->value.int_val;
+
+					$$ = *ret;
+				}
+			}
 			| STRING
+			{
+				Value* val = new Value();
+				val->type = "string";
+				val->string_val = $1;
+				$$ = *val;
+			}
 			;
 
 bigOp		: SLASH
