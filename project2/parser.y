@@ -1,7 +1,10 @@
 %code requires {
-union Value {
-	char* string_val;
-	int int_val;
+struct Value {
+	char* type;
+	union {
+		char* string_val;
+		int int_val;
+	};
 };
 
 }
@@ -24,6 +27,7 @@ union Value {
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <typeinfo>
 using namespace std;
 
 int yylex();
@@ -41,24 +45,23 @@ int scopeLevel = 1;
 // Class that represents an instantiated variable and its value based on scope
 class VariableInstance {
 	public:
-		char* type;
 		int scope;
 		Value value;
 
 		VariableInstance(char* val) {
-			this->type = stringLiteral;
+			this->value.type = stringLiteral;
 			this->scope = scopeLevel;
 			this->value.string_val = val;
 		}
 
 		VariableInstance(int val) {
-			this->type = intString;
+			this->value.type = intString;
 			this->scope = scopeLevel;
 			this->value.int_val = val;
 		}
 
 		VariableInstance() {
-			this->type = noType;
+			this->value.type = noType;
 			this->scope = scopeLevel;
 		}
 };
@@ -68,24 +71,11 @@ void typeError(char*) {
 	// TODO: implement this function completely
 }
 
-/*
-int eval(int first, int sec, char* op) {
-	int ret = 0;
-	switch(*op) {
-		case '*':
-			ret = first * sec;
-			break;
-
-		case '/'
-	}
-
-	return ret;
-}
-*/
-
 unordered_map <string, vector<VariableInstance> > symbolTable;
 
 %}
+
+
 
 %start script
 
@@ -163,6 +153,9 @@ paramList	: paramList COMMA expr
 			;
 
 expr		: OPENPAREN expr CLOSEPAREN
+			{
+
+			}
 			| sum
 			;
 

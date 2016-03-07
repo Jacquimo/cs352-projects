@@ -42,13 +42,16 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 1 "parser.y" /* yacc.c:1915  */
 
-union Value {
-	char* string_val;
-	int int_val;
+struct Value {
+	char* type;
+	union {
+		char* string_val;
+		int int_val;
+	};
 };
 
 
-#line 52 "y.tab.h" /* yacc.c:1915  */
+#line 55 "y.tab.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -112,13 +115,13 @@ union Value {
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 15 "parser.y" /* yacc.c:1915  */
+#line 18 "parser.y" /* yacc.c:1915  */
 
 	char* string_val;
 	int int_val;
 	Value value;
 
-#line 122 "y.tab.h" /* yacc.c:1915  */
+#line 125 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
