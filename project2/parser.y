@@ -31,7 +31,7 @@ action		: declaration
 declaration	: VAR ID
 			| VAR assignment
 			;
-			
+
 assignment	: varId EQUAL result
 			;
 
@@ -90,8 +90,8 @@ newlines	: newlines NEWLINE
 			;
 %%
 
-FILE *yyin;
-int yylineno;
+extern FILE *yyin;
+extern int yylineno;
 int yyerror(char *s)
 {
     fprintf(stdout, "syntax error, line %d\n", yylineno);

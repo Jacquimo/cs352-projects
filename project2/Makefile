@@ -1,5 +1,5 @@
 parser:y.tab.c lex.yy.c
-	gcc y.tab.c lex.yy.c -o parser -lfl
+	g++ y.tab.c lex.yy.c -o parser -lfl
 y.tab.c: parser.y
 	bison -y -d -g -t --debug --verbose parser.y
 lex.yy.c: yacc_example_lex.l

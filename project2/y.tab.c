@@ -1503,8 +1503,8 @@ yyreturn:
 #line 91 "parser.y" /* yacc.c:1906  */
 
 
-FILE *yyin;
-int yylineno;
+extern FILE *yyin;
+extern int yylineno;
 int yyerror(char *s)
 {
     fprintf(stdout, "syntax error, line %d\n", yylineno);
