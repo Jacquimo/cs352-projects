@@ -149,8 +149,12 @@ action		: declaration
 
 scopeChange	: OPENCURL newlines
  			{
+				scopeLevel++;
 			}
 			statements CLOSECURL
+			{
+				scopeLevel--;
+			}
 			;
 
 declaration	: VAR ID
