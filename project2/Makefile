@@ -1,7 +1,7 @@
 # Makefile for Miniscript language
 
 CC=g++
-CFLAGS= -g
+CFLAGS= -Wno-write-strings
 
 parser:y.tab.c lex.yy.c
 	$(CC) $(CFLAGS) y.tab.c lex.yy.c -o parser -lfl
