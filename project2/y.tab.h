@@ -131,7 +131,7 @@ struct Result {
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 37 "parser.y" /* yacc.c:1915  */
+#line 38 "parser.y" /* yacc.c:1915  */
 
 	char* string_val;
 	int int_val;
@@ -139,8 +139,9 @@ union YYSTYPE
 	Pair fieldVal;
 	ScriptObject* obj;
 	Result* res;
+	bool boolean;
 
-#line 144 "y.tab.h" /* yacc.c:1915  */
+#line 145 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

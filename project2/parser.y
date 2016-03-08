@@ -33,6 +33,7 @@ struct Result {
 %type <fieldVal> field varId
 %type <obj> fieldlist objdec
 %type <res> result
+%type <boolean> assignment
 
 %union {
 	char* string_val;
@@ -41,6 +42,7 @@ struct Result {
 	Pair fieldVal;
 	ScriptObject* obj;
 	Result* res;
+	bool boolean;
 }
 
 
@@ -236,7 +238,20 @@ declaration	: VAR ID
 			| VAR assignment
 			;
 
+/* "assignment" rule has type bool */
+/*
+ * The value returned by this rule is whether or not a type error occured, as we
+ * need to handle the case where the variable has been redeclared with the "var"
+ * keyword. Therefore, the type checking must be handled elsewhere.
+ */
 assignment	: varId EQUAL result
+			{
+				Result* res = $3;
+				Pair* pair = &($1);
+
+				// do some type checking
+				//if (res->is)
+			}
 			;
 
 /* "varId" rule has type Pair */
