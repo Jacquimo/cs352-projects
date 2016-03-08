@@ -1,0 +1,5 @@
+<script type="text/JavaScript">
+
+docment.write("This has document spelt incorrectly.")
+
+</script>

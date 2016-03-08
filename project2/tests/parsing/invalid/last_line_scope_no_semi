@@ -1,0 +1,10 @@
+<script type="text/JavaScript"> 
+var a = 5;
+var br = "<br />";
+{
+	a = 50;
+	document.write(a, br)}
+
+}
+document.write(a, br);
+</script> 

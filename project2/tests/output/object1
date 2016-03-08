@@ -1,0 +1,10 @@
+<script type="text/JavaScript">
+
+var data = {
+	a: 12,
+	b: "word"
+}
+
+document.write(data.a);
+
+</script>

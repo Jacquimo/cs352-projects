@@ -1,0 +1,11 @@
+<script type="text/JavaScript"> 
+var separated = " (separated!) "
+
+document.write("parsing list with", separated, "quotes.", "<br />");
+
+var ten = 10; var two = 2; var twenty = 20
+var five = 5;
+var word = (five - 5) + ten + two;
+var result = (word - (twenty * (12 )) * 27 - five + 21 / 3)
+document.write(result);
+</script> 

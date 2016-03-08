@@ -1,0 +1,12 @@
+<script type="text/JavaScript">
+var a = 2;
+{
+	document.write(a);
+	var b = a;
+	var a = b*b-4*2+8*21/7+3;
+	document.write(a);
+}
+{
+	document.write(a);
+}
+</script>

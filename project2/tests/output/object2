@@ -1,0 +1,17 @@
+<script type="text/JavaScript">
+
+var data = {
+	a: 12,
+	b: "word",
+	c
+}
+
+document.write(data.a);
+document.write("<br />");
+
+data.a = 99;
+
+document.write(data.a);
+document.write("<br />");
+
+</script>

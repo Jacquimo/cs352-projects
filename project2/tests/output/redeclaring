@@ -1,0 +1,21 @@
+<script type="text/JavaScript">
+
+var x = 12;
+
+document.write(x);
+document.write("<br />");
+
+var x;
+
+document.write("testing...", "<br />");
+x = "redeclared";
+
+document.write(x);
+document.write("<br />");
+
+var x = 9001;
+
+document.write(x);
+document.write("<br />");
+
+</script>

@@ -1,0 +1,6 @@
+<script type="text/JavaScript">
+var y = "hello";
+var foo = y - 2;
+var bar ="hello bob";
+</script>
+

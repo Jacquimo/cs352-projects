@@ -1,0 +1,20 @@
+<script type="text/JavaScript"> 
+
+var dump = "donald trump";
+var e;
+
+{
+	document.write("the dump is ", dump);
+	var backupDump = dump;
+	dump = "<br />";
+	document.write(dump);
+	e = dump
+	dump = backupDump;
+}
+{
+	document.write("please don't vote for ", dump, ", unless you're a guy who really likes the trump", e);
+	document.write(e,e);
+}
+</script> 
+
+

@@ -1,0 +1,12 @@
+<script type="text/JavaScript">
+
+var bar = 9;
+bAr = "hello"; BAR = "empty";
+foO = (8)
+foo = (bAr)
+foo = (8 + bAr) * 9
+foo = (a * bar) + (foo - 9) 
+foo = (a+(bar - 9 * (bar + 2) - 8 ) / foo + bar) - 8
+
+
+</script>

@@ -1,0 +1,3 @@
+<script type="text/JavaScript"> 
+var result = ((two + ten) - ("twenty" * (12 )) * 27 - 5 + seven / 3)
+</script> 

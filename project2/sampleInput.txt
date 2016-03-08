@@ -1,13 +1,4 @@
 <script type="text/JavaScript">
-
-
-var hello = 60 / 5 + 10 * 5683;
-document.write("hello\n ", "<br />", "world ", "dude" + "bro ", (70 * 8 + 4), "<br />")
-
-var person = {
-lastName:"Lincoln", firstName,
-
-age: 150, eyeColor: "blue"+"grey"
-};
-
+document.write( (2 + (2 + 2)) );
+document.write( "string "  , 5 + 5 );
 </script>

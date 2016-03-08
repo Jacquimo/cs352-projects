@@ -1,0 +1,7 @@
+<script type="text/JavaScript"> 
+var object = {
+	field1, field3,
+	
+	field2: value,
+}
+</script> 

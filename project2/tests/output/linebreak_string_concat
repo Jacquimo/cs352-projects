@@ -1,0 +1,8 @@
+<script type="text/JavaScript">
+document.write("thing", (")"), "<br />")
+
+var nottabr = "<br />"
+nottabr = "<br/>"
+nottabr = nottabr + "<br />"
+document.write(nottabr, "<br />")
+</script>

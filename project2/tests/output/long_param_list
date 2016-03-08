@@ -1,0 +1,4 @@
+<script type="text/JavaScript"> 
+var result = "string"
+document.write("This will output a ", result," ending with a newline.", "<br />");
+</script> 

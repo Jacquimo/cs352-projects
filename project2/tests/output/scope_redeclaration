@@ -1,0 +1,9 @@
+<script type="text/JavaScript">
+var two = "2";
+{
+	var two = 2;
+	document.write(two*two);
+}
+document.write(two);
+document.write(two*two);
+</script> 

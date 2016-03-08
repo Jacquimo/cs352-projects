@@ -1,0 +1,9 @@
+<script type="text/JavaScript">
+var y = {
+	x:"hello"
+}
+
+var foo = y.x + " ";
+var bar = foo + "bob";
+</script>
+

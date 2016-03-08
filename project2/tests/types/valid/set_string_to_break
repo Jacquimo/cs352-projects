@@ -1,0 +1,9 @@
+<script type="text/JavaScript">
+var y = "string";
+var x = "<br />"; 
+
+var ycopy = y;
+
+y = x;
+x = ycopy;
+</script>

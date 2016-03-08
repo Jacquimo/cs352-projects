@@ -1,0 +1,6 @@
+<script type="text/JavaScript"> 
+var five = "five"; var ten = "10"
+var word = (five + "5") + ten + "two";
+document.write(word, "<br />");
+var result = ((two + ten) - ("twenty" * (12 )) * 27 - "five" + seven / 3)
+</script> 

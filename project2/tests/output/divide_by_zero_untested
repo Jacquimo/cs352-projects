@@ -1,0 +1,14 @@
+<script type="text/JavaScript">
+var a = 5;
+var b = 27;
+var c = 1;
+var d = 3;
+
+document.write(b-c-d);
+document.write(a*d+b);
+document.write(a*(b+c));
+document.write(c+a*b);
+document.write((c+a)*b);
+document.write((c+a+a*d-b)/0);
+
+</script>

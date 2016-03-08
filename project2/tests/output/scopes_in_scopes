@@ -1,0 +1,57 @@
+<script type="text/JavaScript">
+var scopeCity = "metropolis";
+var br = "<br />"; var months
+{
+	months = 1
+	{
+		months = months + 1
+		var scopeCity = "cirtuit city";
+		var e = br;
+		{
+			months = months + 1
+			{
+				months = months + 1
+				{
+					months = months + 1
+					document.write("Hello from ", scopeCity, br);
+					{
+						months = months + 1
+						var scopeCity = {
+							capitolBuildingX: "-77.0164",
+							capitolBuildingY: "38.9047",
+							name: "Washington, D.C."
+						}
+						document.write(scopeCity.name + " is located at a longitude of " + scopeCity.capitolBuildingX + " and a latitude of " + scopeCity.capitolBuildingY + ".", e);
+						document.write("(Donald Trump probably won't make it in.)", e);
+						document.write("But since Donald prefers only significant numbers (those larger than a million), lets multiply the longitude by a million.",e);
+						document.write(scopeCity.capitolBuildingX + " times " + "one million" + " = ", (0-77)*1000000, e);
+					}
+					document.write(e,e,"That's enough of that. For scope city, we flew back to ", scopeCity, e);
+					var blueSodaAvailability = "unavailable";
+					var season = "winter";
+					{
+						months = months + 1
+						document.write("But that's not a city!", e);
+						scopeCity = "Ely, Minnesota";
+						var blueSodaAvailability = "available";
+						var season = "summer";
+						document.write("So we moved to ", scopeCity, e);
+						document.write("Since it is " + season + " in ", scopeCity, ", the delicious blue soda is " + blueSodaAvailability + ".", e);
+					}
+					{
+						months = months + 1
+						document.write(e,e,"Some time went by. How long was I on vacation?", e);
+						document.write(months, " months", e);
+					}
+					document.write("Since it is " + season + " in ", scopeCity, ", the delicious blue soda is " + blueSodaAvailability + ".", e);
+				}
+			}
+		}
+		document.write("We stayed awhile in " + scopeCity + ", but slowly vacation times ended.", e);
+	}
+	document.write("We ended up leaving and going back to " + scopeCity + ".", br);
+	document.write("Hard to put that one on a map, though.", br);
+	scopeCity = "West Lafayette";
+}
+document.write("And now we're in " + scopeCity + ".", br);
+</script>

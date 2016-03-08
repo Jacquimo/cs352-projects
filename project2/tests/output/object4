@@ -1,0 +1,30 @@
+<script type="text/JavaScript">
+
+var person = {
+lastName:"Lincoln", firstName,
+age: 150, eyeColor: "blue"+"grey"
+}
+
+person.age = 100;
+
+document.write(person.age);
+document.write("<br />");
+
+var x = person.age;
+
+document.write(x);
+document.write("<br />");
+
+person.firstName = "Abe";
+
+document.write(person.firstName);
+document.write("<br />");
+
+person.firstName = "Mr.";
+
+document.write(person.firstName, " ", person.lastName);
+document.write("<br />");
+
+person.firstName = 427;
+
+</script>

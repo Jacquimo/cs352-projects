@@ -1,0 +1,13 @@
+<script type="text/JavaScript">
+
+var newline = "<br />"
+
+var dataObjectGuy = {
+	x: 22, y: 42,
+	z,
+	scale: "inches"
+}
+
+document.write(dataObjectGuy.x, " ", dataObjectGuy.scale, newline);
+
+</script>

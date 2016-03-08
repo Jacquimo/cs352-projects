@@ -1,0 +1,4 @@
+<script type="text/JavaScript"> 
+var math = 26
+document.write("26+10 = ",math+10, "<br />");
+</script> 

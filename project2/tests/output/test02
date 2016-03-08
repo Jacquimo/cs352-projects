@@ -1,0 +1,28 @@
+<script type="text/JavaScript">
+{
+	var a = 10;
+	var b = 8;
+	var c = 4; var d = 22; var e = 99;
+	{
+		var g = 2;
+		{
+			var n = 3;
+			document.write(e*a + a + b*(a*a) + b*a + b*c, " = 1912", "<br />");
+			document.write((d*d*d/d/d-a-a+c)*n/g);
+			document.write("<br />");
+			document.write((a+a)-(b+b)/c-c-(c-b));
+			document.write("<br />");
+
+			var n = g;
+			var a = d;
+			c = a;
+			n = e;
+			g = b;
+		}
+		document.write((c+g)-(c-e), "<br />");
+	}
+	document.write((c+b)-(c-e), "<br />");
+	document.write(((c+b)-(c-e))*(d*d*(e+(c-a))), "<br />");
+}
+
+</script>

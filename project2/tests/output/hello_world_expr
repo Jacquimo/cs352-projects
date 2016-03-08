@@ -1,0 +1,7 @@
+<script type="text/JavaScript">
+
+var a = 2;
+var b = 10;
+document.write((a+b+3),"k","wasd","hello" + " " + "world");
+
+</script>

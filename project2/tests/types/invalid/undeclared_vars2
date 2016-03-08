@@ -1,0 +1,6 @@
+<script type="text/JavaScript">
+var foo; 
+foo = (((a)*(b-2))+2)/5;
+var bar ="hello bob";
+</script>
+

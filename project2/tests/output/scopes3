@@ -1,0 +1,56 @@
+<script type="text/JavaScript">
+var br = "<br />";
+var text = 34;
+{
+	var JavaScript = 2;
+	document.write("<script type=",text/JavaScript,">");
+}
+{
+	var text = "text/JavaScript";
+	{
+		document.write(br, text, br, text);
+	}
+	var JavaScript = "JavaScript";
+	document.write(br, JavaScript, br);
+}
+var scope = {
+	n: text,
+	stat: br,
+	text: text
+}
+document.write(scope.n, scope.stat);
+{
+	var scope2 = {
+		n: scope.text,
+		stat: scope.stat
+	}
+	{
+		var scope3 = {
+			WOHPLZW84ME: scope2.stat, n: scope2.n,
+			note: "scope3"
+		}
+		{
+			var scope4 = {
+				note: scope3.note + " is best",
+				br: scope3.WOHPLZW84ME,
+				scope: scope.stat
+			}
+			document.write(scope4.note, scope4.br, scope4.scope);
+			scope3.WOHPLZW84ME = "WOHPLZW84ME"
+			
+			var scope3 = {
+				madness: "excessive scoping",
+				WOHPLZW84ME: "Whoa, wait, please wait for me!"
+			}
+			document.write(scope3.madness + "..." + scope3.WOHPLZW84ME, scope4.br);
+		}
+		document.write(scope3.WOHPLZW84ME, scope.stat, scope2.n);
+		{
+			scope3.n = scope2.n;
+			scope2.n = 1991;
+		}
+	}
+	document.write(scope2.stat, scope2.n, scope2.stat);
+}
+
+</script>

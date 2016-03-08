@@ -1,0 +1,36 @@
+<script type="text/JavaScript">
+
+var chunk = {
+	size: 2,
+	height
+}
+var node = {
+	size: 100,
+	width: 99,
+	height: 22
+}
+
+document.write(node.size, "<br />");
+{
+	node.size = 24;
+	chunk.height = node.width;
+	document.write(node.width + chunk.size, "<br />");
+	{
+		var chunk = {
+			size: 22,
+			height: 42
+		}
+		document.write(chunk.height, "<br />");
+		chunk.size = node.width;
+		node.height = chunk.height;
+	}
+	document.write(chunk.height, "<br />");
+	document.write(node.height, " and ", chunk.size, "<br />");
+	var k;
+	{
+		k = "honestly tests always had newlines because it made them easier to write"
+	}
+	document.write(k, "<br />");
+}
+document.write(node.size, "<br />")
+</script>

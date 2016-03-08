@@ -1,0 +1,7 @@
+<script type="text/JavaScript">
+
+var x = 12;
+
+x = "a";
+
+</script>

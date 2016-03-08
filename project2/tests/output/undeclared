@@ -1,0 +1,16 @@
+<script type="text/JavaScript">
+var two = 2
+var ten = 10
+var result = two + ten
+result = ten * ten + ten / ten
+var ID
+ID = result
+var a = "hello"
+a = "world"
+A = "WORLD"
+t = "Pur$%due"
+result = 1 + 2/3
+result = ten + 4
+var b = 5 + ten + 1
+</script>
+

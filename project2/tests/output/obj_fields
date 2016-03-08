@@ -1,0 +1,11 @@
+<script type="text/JavaScript"> 
+
+var objects = {
+	value: 8, scale: 12
+}
+
+document.write(objects.value + objects.scale*3, "<br />");
+
+</script> 
+
+

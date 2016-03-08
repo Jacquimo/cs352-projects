@@ -1,0 +1,9 @@
+<script type="text/JavaScript"> 
+var a = 5;
+var br = "<br />";
+{
+	a = 50;
+	document.write(a, br, "this won't print!";
+}
+document.write(a, br);
+</script> 

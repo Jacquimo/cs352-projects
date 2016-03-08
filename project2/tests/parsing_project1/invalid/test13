@@ -1,0 +1,5 @@
+<script type="text/JavaScript">
+
+document.write("Two semicolons follow this statement.");;
+
+</script>

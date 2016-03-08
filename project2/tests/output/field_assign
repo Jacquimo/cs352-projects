@@ -1,0 +1,22 @@
+<script type="text/JavaScript">
+
+var a = {
+	k: 12,
+	n: 34
+}
+var a = "sam";
+var a = 999;
+
+document.write(a, "<br />");
+
+var a = {
+	g, h, i, j, k, l, m, n: 34, o
+}
+
+document.write(a.n, "<br />");
+
+a.m = 4;
+
+document.write(a.m);
+
+</script>

@@ -1,0 +1,8 @@
+<script type="text/JavaScript">
+var a = 5 + 6
+var b = 6 - a
+var c = 1
+document.write(a)
+document.write(b, c)
+document.write("%d", c); document.write("%d", c, (5+5+(1+2)))
+</script>

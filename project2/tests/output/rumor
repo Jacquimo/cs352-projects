@@ -1,0 +1,39 @@
+<script type="text/JavaScript">
+
+var nest1 = {
+    size: 32,
+    inner
+}
+var nest2 = {
+    size: 12,
+    inner
+}
+var nest3 = {
+    size: 16,
+    inner: "isol"
+}
+nest2.inner = nest1.size;
+document.write(nest2.inner);
+document.write(nest3.size);
+nest1.inner = nest3.inner;
+
+document.write("the 240 project required us to solve ", nest1.inner);
+document.write(", a test case built on many columns", "<br />");
+
+document.write("rumor had it that only ", nest1.size/16, " students");
+document.write(" were able to get full credit.");
+document.write("<br />");
+
+document.write("<br />");
+{
+	var rest = "but " + "I" + " knew " + "one";
+	var otherStuff = rest + " of them"
+
+	otherStuff = otherStuff + ", and let's";
+	document.write(otherStuff);
+	document.write(" be honest...")
+
+	document.write("<br />", "He just put", "<br />", "<br />", "if (nColumns > 300) {", "<br />", "    nColumns /= 32; //beat isol", "<br />", "}", "<br />")
+}
+document.write(rest);
+</script>

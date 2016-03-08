@@ -1,0 +1,9 @@
+<script type="text/JavaScript"> 
+var br = "<br />";
+var myString = "a string";
+myString = br;
+br = "<br />";
+br = "a new string";
+
+document.write(br, myString);
+</script> 

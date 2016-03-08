@@ -1,0 +1,8 @@
+<script type="text/JavaScript">
+var person = {
+    age,
+    salary: 10,
+    age : 5
+}
+
+</script>

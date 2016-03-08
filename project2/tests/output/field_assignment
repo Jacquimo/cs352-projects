@@ -1,0 +1,12 @@
+<script type="text/JavaScript">
+var A = {
+	x: 2
+}
+var B = {
+	x: 3
+}
+A.x = B.x
+
+document.write(A.x);
+
+</script>

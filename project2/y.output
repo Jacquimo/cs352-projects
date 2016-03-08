@@ -60,7 +60,7 @@ Grammar
    30 expr: OPENPAREN expr CLOSEPAREN
    31     | sum
 
-   32 sum: sum smallOp sum
+   32 sum: expr smallOp expr
    33    | factor
 
    34 factor: factor bigOp factor
@@ -152,9 +152,9 @@ docwrite (43)
 paramList (44)
     on left: 27 28 29, on right: 26 27
 expr (45)
-    on left: 30 31, on right: 18 24 27 28 30
+    on left: 30 31, on right: 18 24 27 28 30 32
 sum (46)
-    on left: 32 33, on right: 31 32
+    on left: 32 33, on right: 31
 factor (47)
     on left: 34 35, on right: 33 34
 term (48)
@@ -520,21 +520,21 @@ State 34
 State 35
 
    28 paramList: expr .
+   32 sum: expr . smallOp expr
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
 
     $default  reduce using rule 28 (paramList)
+
+    smallOp  go to state 54
 
 
 State 36
 
    31 expr: sum .
-   32 sum: sum . smallOp sum
-
-    PLUS   shift, and go to state 52
-    MINUS  shift, and go to state 53
 
     $default  reduce using rule 31 (expr)
-
-    smallOp  go to state 54
 
 
 State 37
@@ -631,8 +631,14 @@ State 46
 State 47
 
    18 result: expr .
+   32 sum: expr . smallOp expr
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
 
     $default  reduce using rule 18 (result)
+
+    smallOp  go to state 54
 
 
 State 48
@@ -645,8 +651,13 @@ State 48
 State 49
 
    30 expr: OPENPAREN expr . CLOSEPAREN
+   32 sum: expr . smallOp expr
 
+    PLUS        shift, and go to state 52
+    MINUS       shift, and go to state 53
     CLOSEPAREN  shift, and go to state 61
+
+    smallOp  go to state 54
 
 
 State 50
@@ -687,13 +698,15 @@ State 53
 
 State 54
 
-   32 sum: sum smallOp . sum
+   32 sum: expr smallOp . expr
 
-    NUM     shift, and go to state 30
-    ID      shift, and go to state 31
-    STRING  shift, and go to state 32
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
+    STRING     shift, and go to state 32
+    OPENPAREN  shift, and go to state 33
 
-    sum     go to state 63
+    expr    go to state 63
+    sum     go to state 36
     factor  go to state 37
     term    go to state 38
 
@@ -760,14 +773,20 @@ State 61
 State 62
 
    27 paramList: paramList COMMA expr .
+   32 sum: expr . smallOp expr
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
 
     $default  reduce using rule 27 (paramList)
+
+    smallOp  go to state 54
 
 
 State 63
 
-   32 sum: sum . smallOp sum
-   32    | sum smallOp sum .
+   32 sum: expr . smallOp expr
+   32    | expr smallOp expr .
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
@@ -884,8 +903,14 @@ State 73
 State 74
 
    24 fieldAssign: COLON expr .
+   32 sum: expr . smallOp expr
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
 
     $default  reduce using rule 24 (fieldAssign)
+
+    smallOp  go to state 54
 
 
 State 75

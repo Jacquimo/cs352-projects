@@ -1,0 +1,13 @@
+<script type="text/JavaScript">
+
+var obj = {
+	x: 12, y: 44
+}
+var obj = {
+	z: 44,
+	x: obj.z, y: obj.z
+}
+
+document.write(obj.x, "<br />");
+
+</script>

@@ -1,0 +1,13 @@
+<script type="text/JavaScript"> 
+var object = {
+	field1, field3,
+	
+	field2
+}
+
+var object2 = {
+	a:"string"
+}
+
+object.field1 = object2;
+</script> 

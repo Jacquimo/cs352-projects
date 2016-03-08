@@ -1,0 +1,16 @@
+<script type="text/JavaScript">
+var two = 2 ; var ten = 10
+var linebreak = "<br />"
+var ID
+var a;
+var id = 23;
+foo = 2; foO = 1
+var bAr = foo + foO;
+var b = a; var c = a; var d; document.write(linebreak); b = a/b;
+c = b; a=b;
+var e = a;
+var f = a
+a = b
+b = c;
+</script>
+

@@ -1,0 +1,26 @@
+<script type="text/JavaScript">
+{
+	var a = 2;
+	document.write(a, "<br />");
+	{
+		var a;
+		a = "Your test..."
+		document.write(a, "<br />");
+		a = "As good as scoped!";
+		document.write(a, "<br />");
+		var a = 44;
+		document.write(a, "<br />");
+		{
+			a = 32;
+			var b;
+			{
+				b = "lion oil ";
+			}
+			document.write(b, a, "<br />");
+		}
+		document.write(a, "<br />");
+	}
+	document.write(a, "<br />");
+}
+
+</script>

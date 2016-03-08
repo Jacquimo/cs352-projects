@@ -1,0 +1,19 @@
+<script type="text/JavaScript">
+
+var nest1 = {
+    size: 32,
+    inner
+}
+var nest2 = {
+    size: 12,
+    inner
+}
+var nest3 = {
+    size: 16,
+    inner
+}
+nest2.inner = nest3;
+nest1.inner = nest2;
+document.write(nest1.inner.inner.size);
+
+</script>

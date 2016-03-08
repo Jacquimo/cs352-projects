@@ -1,0 +1,5 @@
+<script type="text/JavaScript">
+
+document.write("This is a quoted string.  But it is missing its ending quote.)
+
+</script>

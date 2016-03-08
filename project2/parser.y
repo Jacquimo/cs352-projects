@@ -483,7 +483,7 @@ expr		: OPENPAREN expr CLOSEPAREN
 			;
 
 /* "sum" rule has type Value */
-sum			: sum smallOp sum
+sum			: expr smallOp expr
 			{
 				// check that types are the same
 				if (!streq($1.type, $3.type))

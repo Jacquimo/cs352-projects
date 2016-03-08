@@ -1,0 +1,9 @@
+<script type="text/JavaScript"> 
+var person = {
+	lastName:"Lincoln", firstName,
+
+	age:150, eyeColor:"blue"+"grey"
+}
+</script> 
+
+
