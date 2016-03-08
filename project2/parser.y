@@ -7,13 +7,13 @@ struct Value {
 	};
 };
 
-struct Pair {
-	char* name;
-	Value value;
-};
-
 struct VariableInstance;
 struct ScriptObject;
+
+struct Pair {
+	char* name;
+	VariableInstance* instance;
+};
 
 struct Result {
 	bool isObject;
@@ -33,6 +33,7 @@ struct Result {
 %type <fieldVal> field
 %type <obj> fieldlist objdec
 %type <res> result
+%type <instance> varId
 
 %union {
 	char* string_val;
@@ -41,6 +42,7 @@ struct Result {
 	Pair fieldVal;
 	ScriptObject* obj;
 	Result* res;
+	VariableInstance* instance;
 }
 
 
@@ -128,10 +130,6 @@ struct VariableInstance {
 	}
 
 	virtual void addField(Pair* pair) { }
-	virtual bool updateField(char* name, Value* val) {
-		this->value = *val;
-		return true;
-	}
 };
 
 /*
@@ -153,14 +151,14 @@ struct ScriptObject: public VariableInstance {
 
 	// Adds field to list if it doesn't exist, otherwise it updates the value
 	void addField(Pair* pair) {
-		if (!this->updateField(pair->name, &pair->value))
+		if (!this->updateField(pair->name, pair->instance))
 			fieldlist.push_back(*pair);
 	}
 
-	bool updateField(char* name, Value* val) {
+	bool updateField(char* name, VariableInstance* instance) {
 		for (int i = 0; i < fieldlist.size(); ++i) {
 			if (streq(name, fieldlist[i].name)) {
-				fieldlist[i].value = *val;
+				fieldlist[i].instance = instance;
 				return true;
 			}
 		}
@@ -243,6 +241,7 @@ declaration	: VAR ID
 assignment	: varId EQUAL result
 			;
 
+/* "varId" rule has type VariableInstance* */
 varId		: varId DOT ID
 			| ID
 			;
@@ -289,6 +288,7 @@ fieldlist	: fieldlist COMMA emptySpace field
 /* "field" rule has type Pair */
 field		: ID fieldAssign
 			{
+				/*
 				Pair* ret = new Pair();
 				ret->name = $1;
 				ret->value = $2;
@@ -301,6 +301,24 @@ field		: ID fieldAssign
 					else if (streq(ret->value.type, WORD_STRING))
 						printf("\"%s\"", ret->value.string_val);
 					else if (streq(ret->value.type, WORD_NO_TYPE))
+						printf("(unassigned)");
+					printf("\n");
+				}
+				*/
+
+				Pair* ret = new Pair();
+				ret->name = $1;
+				ret->instance = new VariableInstance();
+				ret->instance->value = $2;
+				$$ = *ret;
+
+				if (VERBOSE) {
+					printf("ID = \"%s\"\t Value = ", ret->name);
+					if (streq(ret->instance->value.type, WORD_INT))
+						printf("%d", ret->instance->value.int_val);
+					else if (streq(ret->instance->value.type, WORD_STRING))
+						printf("\"%s\"", ret->instance->value.string_val);
+					else if (streq(ret->instance->value.type, WORD_NO_TYPE))
 						printf("(unassigned)");
 					printf("\n");
 				}

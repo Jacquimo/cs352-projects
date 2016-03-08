@@ -50,13 +50,13 @@ struct Value {
 	};
 };
 
-struct Pair {
-	char* name;
-	Value value;
-};
-
 struct VariableInstance;
 struct ScriptObject;
+
+struct Pair {
+	char* name;
+	VariableInstance* instance;
+};
 
 struct Result {
 	bool isObject;
