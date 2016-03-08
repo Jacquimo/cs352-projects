@@ -39,7 +39,7 @@ struct Result {
 	char* string_val;
 	int int_val;
 	Value value;
-	Pair fieldVal;
+	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
 	bool boolean;
@@ -247,7 +247,7 @@ declaration	: VAR ID
 assignment	: varId EQUAL result
 			{
 				Result* res = $3;
-				Pair* pair = &($1);
+				Pair* pair = $1;
 
 				// do some type checking
 				//if (res->is)
@@ -259,7 +259,7 @@ assignment	: varId EQUAL result
 varId		: varId DOT ID
 			{
 				// verify that the variable instance is a script object
-				ScriptObject* obj = dynamic_cast<ScriptObject*>($1.instance);
+				ScriptObject* obj = dynamic_cast<ScriptObject*>($1->instance);
 				if (obj == NULL) {
 					typeError("Non-object variable used as an object.");
 				} else {
@@ -275,7 +275,7 @@ varId		: varId DOT ID
 					if (ret == NULL)
 						typeError("Field used before it was declared.");
 
-					$$ = *ret;
+					$$ = ret;
 				}
 			}
 			| ID
@@ -310,7 +310,7 @@ varId		: varId DOT ID
 					ret->instance = var;
 				}
 
-				$$ = *ret;
+				$$ = ret;
 			}
 			;
 
@@ -342,18 +342,18 @@ objdec		: OPENCURL newlines fieldlist emptySpace CLOSECURL
 fieldlist	: fieldlist COMMA emptySpace field
 			{
 				ScriptObject* ret = $1;
-				ret->addField(&($4));
+				ret->addField($4);
 				$$ = ret;
 			}
 			| field
 			{
 				ScriptObject* ret = new ScriptObject();
-				ret->addField(&($1));
+				ret->addField($1);
 				$$ = ret;
 			}
 			;
 
-/* "field" rule has type Pair */
+/* "field" rule has type Pair* */
 field		: ID fieldAssign
 			{
 				/*
@@ -378,7 +378,7 @@ field		: ID fieldAssign
 				ret->name = $1;
 				ret->instance = new VariableInstance();
 				ret->instance->value = $2;
-				$$ = *ret;
+				$$ = ret;
 
 				if (VERBOSE) {
 					printf("ID = \"%s\"\t Value = ", ret->name);

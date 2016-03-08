@@ -136,7 +136,7 @@ union YYSTYPE
 	char* string_val;
 	int int_val;
 	Value value;
-	Pair fieldVal;
+	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
 	bool boolean;

@@ -189,7 +189,7 @@ union YYSTYPE
 	char* string_val;
 	int int_val;
 	Value value;
-	Pair fieldVal;
+	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
 	bool boolean;
@@ -1489,7 +1489,7 @@ yyreduce:
 #line 248 "parser.y" /* yacc.c:1661  */
     {
 				Result* res = (yyvsp[0].res);
-				Pair* pair = &((yyvsp[-2].fieldVal));
+				Pair* pair = (yyvsp[-2].fieldVal);
 
 				// do some type checking
 				//if (res->is)
@@ -1501,7 +1501,7 @@ yyreduce:
 #line 260 "parser.y" /* yacc.c:1661  */
     {
 				// verify that the variable instance is a script object
-				ScriptObject* obj = dynamic_cast<ScriptObject*>((yyvsp[-2].fieldVal).instance);
+				ScriptObject* obj = dynamic_cast<ScriptObject*>((yyvsp[-2].fieldVal)->instance);
 				if (obj == NULL) {
 					typeError("Non-object variable used as an object.");
 				} else {
@@ -1517,7 +1517,7 @@ yyreduce:
 					if (ret == NULL)
 						typeError("Field used before it was declared.");
 
-					(yyval.fieldVal) = *ret;
+					(yyval.fieldVal) = ret;
 				}
 			}
 #line 1524 "y.tab.c" /* yacc.c:1661  */
@@ -1556,7 +1556,7 @@ yyreduce:
 					ret->instance = var;
 				}
 
-				(yyval.fieldVal) = *ret;
+				(yyval.fieldVal) = ret;
 			}
 #line 1562 "y.tab.c" /* yacc.c:1661  */
     break;
@@ -1595,7 +1595,7 @@ yyreduce:
 #line 343 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = (yyvsp[-3].obj);
-				ret->addField(&((yyvsp[0].fieldVal)));
+				ret->addField((yyvsp[0].fieldVal));
 				(yyval.obj) = ret;
 			}
 #line 1602 "y.tab.c" /* yacc.c:1661  */
@@ -1605,7 +1605,7 @@ yyreduce:
 #line 349 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = new ScriptObject();
-				ret->addField(&((yyvsp[0].fieldVal)));
+				ret->addField((yyvsp[0].fieldVal));
 				(yyval.obj) = ret;
 			}
 #line 1612 "y.tab.c" /* yacc.c:1661  */
@@ -1636,7 +1636,7 @@ yyreduce:
 				ret->name = (yyvsp[-1].string_val);
 				ret->instance = new VariableInstance();
 				ret->instance->value = (yyvsp[0].value);
-				(yyval.fieldVal) = *ret;
+				(yyval.fieldVal) = ret;
 
 				if (VERBOSE) {
 					printf("ID = \"%s\"\t Value = ", ret->name);
