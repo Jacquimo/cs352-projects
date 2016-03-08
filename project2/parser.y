@@ -7,26 +7,33 @@ struct Value {
 	};
 };
 
+struct Pair {
+	char* name;
+	Value value;
+};
+
 }
 
 %token <int_val> NUM
 %token <string_val> ID PLUS MINUS ASSIGN SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
 
-%type <value> expr sum factor term
+%type <value> expr sum factor term fieldAssign
+%type <fieldVal> field
 %type <string_val> bigOp smallOp emptySpace newlines
 
 %union {
 	char* string_val;
 	int int_val;
 	Value value;
+	Pair fieldVal;
 }
 
 
 %{
 // Include statements and necessary function prototypes
 #include <stdio.h>
-#include <iostream>
 #include <string>
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 #include <typeinfo>
@@ -49,7 +56,7 @@ extern int yylineno;
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
-#define VERBOSE false
+#define VERBOSE true
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -188,11 +195,38 @@ fieldlist	: fieldlist COMMA emptySpace field
 			| field
 			;
 
+/* "field" rule has type Pair */
 field		: ID fieldAssign
+			{
+				Pair* ret = new Pair();
+				ret->name = $1;
+				ret->value = $2;
+				$$ = *ret;
+
+				if (VERBOSE) {
+					printf("ID = \"%s\"\t Value = ", ret->name);
+					if (streq(ret->value.type, WORD_INT))
+						printf("%d", ret->value.int_val);
+					else if (streq(ret->value.type, WORD_STRING))
+						printf("\"%s\"", ret->value.string_val);
+					else if (streq(ret->value.type, WORD_NO_TYPE))
+						printf("(unassigned)");
+					printf("\n");
+				}
+			}
 			;
 
+/* "fieldAssign" rule has type Value */
 fieldAssign	: COLON expr
+			{
+				$$ = $2;
+			}
 			|
+			{
+				Value* ret = new Value();
+				ret->type = WORD_NO_TYPE;
+				$$ = *ret;
+			}
 			;
 
 docwrite	: DOCWRITE OPENPAREN paramList CLOSEPAREN

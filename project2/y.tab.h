@@ -50,8 +50,13 @@ struct Value {
 	};
 };
 
+struct Pair {
+	char* name;
+	Value value;
+};
 
-#line 55 "y.tab.h" /* yacc.c:1915  */
+
+#line 60 "y.tab.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -115,13 +120,14 @@ struct Value {
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 18 "parser.y" /* yacc.c:1915  */
+#line 24 "parser.y" /* yacc.c:1915  */
 
 	char* string_val;
 	int int_val;
 	Value value;
+	Pair fieldVal;
 
-#line 125 "y.tab.h" /* yacc.c:1915  */
+#line 131 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
