@@ -12,6 +12,9 @@ struct Pair {
 	Value value;
 };
 
+struct VariableInstance;
+struct ScriptObject;
+
 }
 
 %token <int_val> NUM
@@ -20,12 +23,14 @@ struct Pair {
 %type <string_val> bigOp smallOp emptySpace newlines
 %type <value> expr sum factor term fieldAssign
 %type <fieldVal> field
+%type <obj> fieldlist
 
 %union {
 	char* string_val;
 	int int_val;
 	Value value;
 	Pair fieldVal;
+	ScriptObject* obj;
 }
 
 
@@ -112,6 +117,11 @@ struct VariableInstance {
 		this->scope = scopeLevel;
 	}
 
+	virtual void addField(Pair* pair) { }
+	virtual bool updateField(char* name, Value* val) {
+		this->value = *val;
+		return true;
+	}
 };
 
 /*
@@ -146,6 +156,10 @@ struct ScriptObject: public VariableInstance {
 		}
 
 		return false;
+	}
+
+	void replaceFields(vector<Pair>* list) {
+		this->fieldlist = *list;
 	}
 };
 
@@ -230,8 +244,19 @@ result		: expr
 objdec		: OPENCURL newlines fieldlist emptySpace CLOSECURL
 			;
 
+/* "fieldlist" rule has type ScriptObject* */
 fieldlist	: fieldlist COMMA emptySpace field
+			{
+				ScriptObject* ret = $1;
+				ret->addField(&($4));
+				$$ = ret;
+			}
 			| field
+			{
+				ScriptObject* ret = new ScriptObject();
+				ret->addField(&($1));
+				$$ = ret;
+			}
 			;
 
 /* "field" rule has type Pair */
