@@ -33,7 +33,7 @@ struct Result {
 %type <fieldVal> field varId
 %type <obj> fieldlist objdec
 %type <res> result
-%type <boolean> assignment
+%type <boolean> assignment declaration
 
 %union {
 	char* string_val;
@@ -76,7 +76,7 @@ extern int yylineno;
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
-#define VERBOSE true
+#define VERBOSE false
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -188,6 +188,8 @@ void typeError(char* message) {
 	buf[0] = 0;
 	sprintf(buf, "%s: %s | line %d\n", WORD_TYPE_ERROR, message, yylineno);
 	printf("%s", buf);
+
+	exit(1);
 }
 
 %}
@@ -213,6 +215,11 @@ delimiter	: newlines
 
 action		: declaration
 			| assignment
+			{
+				// check if there is a type error pushed up from the assignment
+				if (!($1))
+					typeError("");
+			}
 			| docwrite
 			| scopeChange
 			;
@@ -234,10 +241,18 @@ declaration	: VAR ID
 					vector<VariableInstance> vec;
 					vec.push_back(*(new VariableInstance()));
 					symbolTable[$2] = vec;
+				} else {
+					// if it exists, reset its type
+					vector<VariableInstance> vec = symbolTable.at($2);
+					vec[vec.size()-1].value.type = WORD_NO_TYPE;
 				}
-				//$$ = false; // if it's declared, there can't be a type error
+
+				$$ = false; // if it's declared, there can't be a type error
 			}
 			| VAR assignment
+			{
+				$$ = false;
+			}
 			;
 
 /* "assignment" rule has type bool */
@@ -255,11 +270,13 @@ assignment	: varId EQUAL result
 				// check if there is a type error for objects
 				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
 
+				// the changes to the variable instance within the pair need to be reimplemented
+
 				if (obj == NULL) {
 					if (res->isObject) {
 						ret = true;
 						// assign the variable like its an object, in case it's a re-assignment
-						pair->instance = res->obj;
+						*(pair->instance) = *res->obj;
 					}
 					else {
 						// the instance must be some kind of scalar
@@ -276,11 +293,13 @@ assignment	: varId EQUAL result
 							var = new VariableInstance(res->value.int_val);
 
 						var->scope = pair->instance->scope; // make sure that the scope doesn't change
-						pair->instance = var;
+						*(pair->instance) = *var;
 					}
 					else // the instance must be a script object
-						pair->instance = res->obj;
+						*(pair->instance) = *(res->obj);
 				}
+
+				// at this point, the Pair object should contain the updated information
 
 				$$ = ret;
 			}
