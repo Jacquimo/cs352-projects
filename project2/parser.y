@@ -49,10 +49,13 @@ extern int yylineno;
  */
 
 // Constant Values and Basic Functions (defined with preprocessor directives)
+// type constants
 #define WORD_STRING "string"
 #define WORD_INT "int"
-#define WORD_NO_TYPE "none"
 #define WORD_TYPE_ERROR "type error"
+#define WORD_OBJECT "object"
+#define WORD_NO_TYPE "none"
+
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
@@ -107,6 +110,47 @@ struct VariableInstance {
 	VariableInstance() {
 		this->value.type = WORD_NO_TYPE;
 		this->scope = scopeLevel;
+	}
+
+	virtual void addField(Pair* pair) {}
+	virtual bool updateField(char* name, Value* val) {
+		value = *val;
+		return true;
+	}
+};
+
+/*
+ * Class that represents a script object and therefore has a vector of fields.
+ * The type of this object will be WORD_OBJECT.
+*/
+struct ScriptObject: public VariableInstance {
+	vector<Pair> fieldlist;
+
+	ScriptObject(vector<Pair>* list) {
+		VariableInstance();
+		this->value.type = WORD_OBJECT;
+		this->fieldlist = *list;
+	}
+
+	ScriptObject() {
+		ScriptObject(new vector<Pair>());
+	}
+
+	// Adds field to list if it doesn't exist, otherwise it updates the value
+	void addField(Pair* pair) {
+		if (!this->updateField(pair->name, &pair->value))
+			fieldlist.push_back(*pair);
+	}
+
+	bool updateField(char* name, Value* val) {
+		for (int i = 0; i < fieldlist.size(); ++i) {
+			if (streq(name, fieldlist[i].name)) {
+				fieldlist[i].value = *val;
+				return true;
+			}
+		}
+
+		return false;
 	}
 };
 
