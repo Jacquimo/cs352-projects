@@ -17,9 +17,9 @@ struct Pair {
 %token <int_val> NUM
 %token <string_val> ID PLUS MINUS ASSIGN SLASH MULT EQUAL NEWLINE STRING LBRAK RBRAK SCRIPT OPENTAG SEMICOLON OPENPAREN CLOSEPAREN VAR DOCWRITE COMMA COLON OPENCURL CLOSECURL DOT
 
+%type <string_val> bigOp smallOp emptySpace newlines
 %type <value> expr sum factor term fieldAssign
 %type <fieldVal> field
-%type <string_val> bigOp smallOp emptySpace newlines
 
 %union {
 	char* string_val;
@@ -112,11 +112,6 @@ struct VariableInstance {
 		this->scope = scopeLevel;
 	}
 
-	virtual void addField(Pair* pair) {}
-	virtual bool updateField(char* name, Value* val) {
-		value = *val;
-		return true;
-	}
 };
 
 /*
