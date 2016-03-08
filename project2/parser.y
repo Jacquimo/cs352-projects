@@ -30,10 +30,9 @@ struct Result {
 
 %type <string_val> bigOp smallOp emptySpace newlines
 %type <value> expr sum factor term fieldAssign
-%type <fieldVal> field
+%type <fieldVal> field varId
 %type <obj> fieldlist objdec
 %type <res> result
-%type <instance> varId
 
 %union {
 	char* string_val;
@@ -42,7 +41,6 @@ struct Result {
 	Pair fieldVal;
 	ScriptObject* obj;
 	Result* res;
-	VariableInstance* instance;
 }
 
 
@@ -241,9 +239,64 @@ declaration	: VAR ID
 assignment	: varId EQUAL result
 			;
 
-/* "varId" rule has type VariableInstance* */
+/* "varId" rule has type Pair */
+/* returns the apropriate variable instance (with its name) if it exists in the symbol table */
 varId		: varId DOT ID
+			{
+				// verify that the variable instance is a script object
+				ScriptObject* obj = dynamic_cast<ScriptObject*>($1.instance);
+				if (obj == NULL) {
+					typeError("Non-object variable used as an object.");
+				} else {
+					// verify that the field exists
+					Pair* ret = NULL;
+					for (int i = 0; i < obj->fieldlist.size(); i++) {
+						if (streq(obj->fieldlist[i].name, $3)) {
+							ret = &(obj->fieldlist[i]);
+							break;
+						}
+					}
+
+					if (ret == NULL)
+						typeError("Field used before it was declared.");
+
+					$$ = *ret;
+				}
+			}
 			| ID
+			{
+				Pair* ret = new Pair();
+				ret->name = $1;
+
+				// if the ID cannot be found in the symbol table
+				if (symbolTable.find($1) == symbolTable.end())
+					ret->instance = new VariableInstance();
+				else {
+					// get variable instance with tightest scope
+					vector<VariableInstance> vec = symbolTable.at($1);
+					VariableInstance* var = NULL;
+
+					// find first variable instance with valid scope
+					while (var == NULL && !vec.empty()) {
+						var = &vec.back();
+						if (var->scope > scopeLevel) {
+							var = NULL;
+							vec.pop_back();
+						}
+					}
+
+					// verify that variable instance has valid value
+					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
+						typeError("Variable used before value assigned");
+
+					if (vec.empty())
+						typeError("Variable used outside of scope.");
+
+					ret->instance = var;
+				}
+
+				$$ = *ret;
+			}
 			;
 
 /* "result" rule has type Result* */
@@ -481,7 +534,7 @@ term		: NUM
 					}
 
 					// verify that variable instance has valid value
-					if (streq(var->value.type, WORD_NO_TYPE))
+					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
 						typeError("Variable used before value assigned");
 
 					if (vec.empty())

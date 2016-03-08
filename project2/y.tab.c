@@ -633,10 +633,10 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   196,   196,   199,   202,   203,   206,   207,   210,   211,
-     212,   213,   217,   216,   226,   236,   239,   242,   243,   247,
-     254,   264,   271,   277,   286,   326,   331,   338,   341,   345,
-     349,   353,   357,   364,   411,   418,   446,   453,   460,   500,
-     510,   514,   521,   525,   532,   533,   537,   538
+     212,   213,   217,   216,   226,   236,   239,   244,   266,   303,
+     310,   320,   327,   333,   342,   382,   387,   394,   397,   401,
+     405,   409,   413,   420,   467,   474,   502,   509,   516,   556,
+     566,   570,   577,   581,   588,   589,   593,   594
 };
 #endif
 
@@ -1484,58 +1484,122 @@ yyreduce:
 #line 1485 "y.tab.c" /* yacc.c:1661  */
     break;
 
+  case 17:
+#line 245 "parser.y" /* yacc.c:1661  */
+    {
+				// verify that the variable instance is a script object
+				ScriptObject* obj = dynamic_cast<ScriptObject*>((yyvsp[-2].fieldVal).instance);
+				if (obj == NULL) {
+					typeError("Non-object variable used as an object.");
+				} else {
+					// verify that the field exists
+					Pair* ret = NULL;
+					for (int i = 0; i < obj->fieldlist.size(); i++) {
+						if (streq(obj->fieldlist[i].name, (yyvsp[0].string_val))) {
+							ret = &(obj->fieldlist[i]);
+							break;
+						}
+					}
+
+					if (ret == NULL)
+						typeError("Field used before it was declared.");
+
+					(yyval.fieldVal) = *ret;
+				}
+			}
+#line 1511 "y.tab.c" /* yacc.c:1661  */
+    break;
+
+  case 18:
+#line 267 "parser.y" /* yacc.c:1661  */
+    {
+				Pair* ret = new Pair();
+				ret->name = (yyvsp[0].string_val);
+
+				// if the ID cannot be found in the symbol table
+				if (symbolTable.find((yyvsp[0].string_val)) == symbolTable.end())
+					ret->instance = new VariableInstance();
+				else {
+					// get variable instance with tightest scope
+					vector<VariableInstance> vec = symbolTable.at((yyvsp[0].string_val));
+					VariableInstance* var = NULL;
+
+					// find first variable instance with valid scope
+					while (var == NULL && !vec.empty()) {
+						var = &vec.back();
+						if (var->scope > scopeLevel) {
+							var = NULL;
+							vec.pop_back();
+						}
+					}
+
+					// verify that variable instance has valid value
+					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
+						typeError("Variable used before value assigned");
+
+					if (vec.empty())
+						typeError("Variable used outside of scope.");
+
+					ret->instance = var;
+				}
+
+				(yyval.fieldVal) = *ret;
+			}
+#line 1549 "y.tab.c" /* yacc.c:1661  */
+    break;
+
   case 19:
-#line 248 "parser.y" /* yacc.c:1661  */
+#line 304 "parser.y" /* yacc.c:1661  */
     {
 				Result* ret = new Result();
 				ret->isObject = false;
 				ret->value = (yyvsp[0].value);
 				(yyval.res) = ret;
 			}
-#line 1496 "y.tab.c" /* yacc.c:1661  */
+#line 1560 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 20:
-#line 255 "parser.y" /* yacc.c:1661  */
+#line 311 "parser.y" /* yacc.c:1661  */
     {
 				Result* ret = new Result();
 				ret->isObject = true;
 				ret->obj = (yyvsp[0].obj);
 				(yyval.res) = ret;
 			}
-#line 1507 "y.tab.c" /* yacc.c:1661  */
+#line 1571 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 21:
-#line 265 "parser.y" /* yacc.c:1661  */
+#line 321 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.obj) = (yyvsp[-2].obj);
 			}
-#line 1515 "y.tab.c" /* yacc.c:1661  */
+#line 1579 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 22:
-#line 272 "parser.y" /* yacc.c:1661  */
+#line 328 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = (yyvsp[-3].obj);
 				ret->addField(&((yyvsp[0].fieldVal)));
 				(yyval.obj) = ret;
 			}
-#line 1525 "y.tab.c" /* yacc.c:1661  */
+#line 1589 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 23:
-#line 278 "parser.y" /* yacc.c:1661  */
+#line 334 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = new ScriptObject();
 				ret->addField(&((yyvsp[0].fieldVal)));
 				(yyval.obj) = ret;
 			}
-#line 1535 "y.tab.c" /* yacc.c:1661  */
+#line 1599 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 24:
-#line 287 "parser.y" /* yacc.c:1661  */
+#line 343 "parser.y" /* yacc.c:1661  */
     {
 				/*
 				Pair* ret = new Pair();
@@ -1572,61 +1636,61 @@ yyreduce:
 					printf("\n");
 				}
 			}
-#line 1576 "y.tab.c" /* yacc.c:1661  */
+#line 1640 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 25:
-#line 327 "parser.y" /* yacc.c:1661  */
+#line 383 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1584 "y.tab.c" /* yacc.c:1661  */
+#line 1648 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 26:
-#line 331 "parser.y" /* yacc.c:1661  */
+#line 387 "parser.y" /* yacc.c:1661  */
     {
 				Value* ret = new Value();
 				ret->type = WORD_NO_TYPE;
 				(yyval.value) = *ret;
 			}
-#line 1594 "y.tab.c" /* yacc.c:1661  */
+#line 1658 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 28:
-#line 342 "parser.y" /* yacc.c:1661  */
+#line 398 "parser.y" /* yacc.c:1661  */
     {
 				writeToDoc((yyvsp[0].value));
 			}
-#line 1602 "y.tab.c" /* yacc.c:1661  */
+#line 1666 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 29:
-#line 346 "parser.y" /* yacc.c:1661  */
+#line 402 "parser.y" /* yacc.c:1661  */
     {
 				writeToDoc((yyvsp[0].value));
 			}
-#line 1610 "y.tab.c" /* yacc.c:1661  */
+#line 1674 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 31:
-#line 354 "parser.y" /* yacc.c:1661  */
+#line 410 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[-1].value);
 			}
-#line 1618 "y.tab.c" /* yacc.c:1661  */
+#line 1682 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 32:
-#line 358 "parser.y" /* yacc.c:1661  */
+#line 414 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1626 "y.tab.c" /* yacc.c:1661  */
+#line 1690 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 33:
-#line 365 "parser.y" /* yacc.c:1661  */
+#line 421 "parser.y" /* yacc.c:1661  */
     {
 				// check that types are the same
 				if (!streq((yyvsp[-2].value).type, (yyvsp[0].value).type))
@@ -1673,19 +1737,19 @@ yyreduce:
 					typeError(UNKNOWN_TYPE_EXPL);
 				}
 			}
-#line 1677 "y.tab.c" /* yacc.c:1661  */
+#line 1741 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 34:
-#line 412 "parser.y" /* yacc.c:1661  */
+#line 468 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1685 "y.tab.c" /* yacc.c:1661  */
+#line 1749 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 35:
-#line 419 "parser.y" /* yacc.c:1661  */
+#line 475 "parser.y" /* yacc.c:1661  */
     {
 				// only integers can use the "*" and "/" operators
 				if (!streq((yyvsp[-2].value).type, WORD_INT) || !streq((yyvsp[0].value).type, WORD_INT))
@@ -1713,30 +1777,30 @@ yyreduce:
 				if (VERBOSE)
 					printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *((yyvsp[-1].string_val)), result);
 			}
-#line 1717 "y.tab.c" /* yacc.c:1661  */
+#line 1781 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 36:
-#line 447 "parser.y" /* yacc.c:1661  */
+#line 503 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1725 "y.tab.c" /* yacc.c:1661  */
+#line 1789 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 37:
-#line 454 "parser.y" /* yacc.c:1661  */
+#line 510 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_INT;
 				val->int_val = (yyvsp[0].int_val);
 				(yyval.value) = *val;
 			}
-#line 1736 "y.tab.c" /* yacc.c:1661  */
+#line 1800 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 38:
-#line 461 "parser.y" /* yacc.c:1661  */
+#line 517 "parser.y" /* yacc.c:1661  */
     {
 				// This ID must represent an already assigned variable, or it's an error
 
@@ -1757,7 +1821,7 @@ yyreduce:
 					}
 
 					// verify that variable instance has valid value
-					if (streq(var->value.type, WORD_NO_TYPE))
+					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
 						typeError("Variable used before value assigned");
 
 					if (vec.empty())
@@ -1776,54 +1840,54 @@ yyreduce:
 					(yyval.value) = *ret;
 				}
 			}
-#line 1780 "y.tab.c" /* yacc.c:1661  */
+#line 1844 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 39:
-#line 501 "parser.y" /* yacc.c:1661  */
+#line 557 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_STRING;
 				val->string_val = (yyvsp[0].string_val);
 				(yyval.value) = *val;
 			}
-#line 1791 "y.tab.c" /* yacc.c:1661  */
+#line 1855 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 40:
-#line 511 "parser.y" /* yacc.c:1661  */
+#line 567 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1799 "y.tab.c" /* yacc.c:1661  */
+#line 1863 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 41:
-#line 515 "parser.y" /* yacc.c:1661  */
+#line 571 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1807 "y.tab.c" /* yacc.c:1661  */
+#line 1871 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 42:
-#line 522 "parser.y" /* yacc.c:1661  */
+#line 578 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1815 "y.tab.c" /* yacc.c:1661  */
+#line 1879 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 43:
-#line 526 "parser.y" /* yacc.c:1661  */
+#line 582 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1823 "y.tab.c" /* yacc.c:1661  */
+#line 1887 "y.tab.c" /* yacc.c:1661  */
     break;
 
 
-#line 1827 "y.tab.c" /* yacc.c:1661  */
+#line 1891 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2051,7 +2115,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 540 "parser.y" /* yacc.c:1906  */
+#line 596 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;
