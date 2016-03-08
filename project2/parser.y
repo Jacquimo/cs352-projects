@@ -169,6 +169,8 @@ struct ScriptObject: public VariableInstance {
 	void replaceFields(vector<Pair>* list) {
 		this->fieldlist = *list;
 	}
+
+	virtual ~ScriptObject() { }
 };
 
 // declaring type of symbol table and initializing as global variable
@@ -248,13 +250,43 @@ assignment	: varId EQUAL result
 			{
 				Result* res = $3;
 				Pair* pair = $1;
+				bool ret = false;
 
-				// do some type checking
-				//if (res->is)
+				// check if there is a type error for objects
+				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
+
+				if (obj == NULL) {
+					if (res->isObject) {
+						ret = true;
+						// assign the variable like its an object, in case it's a re-assignment
+						pair->instance = res->obj;
+					}
+					else {
+						// the instance must be some kind of scalar
+						pair->instance->value = res->value;
+					}
+				} else {
+					if (!res->isObject) { // assign the variable like it's a scalar variable
+						ret = true;
+
+						VariableInstance* var;
+						if (streq(res->value.type, WORD_STRING))
+							var = new VariableInstance(res->value.string_val);
+						else
+							var = new VariableInstance(res->value.int_val);
+
+						var->scope = pair->instance->scope; // make sure that the scope doesn't change
+						pair->instance = var;
+					}
+					else // the instance must be a script object
+						pair->instance = res->obj;
+				}
+
+				$$ = ret;
 			}
 			;
 
-/* "varId" rule has type Pair */
+/* "varId" rule has type Pair* */
 /* returns the apropriate variable instance (with its name) if it exists in the symbol table */
 varId		: varId DOT ID
 			{
