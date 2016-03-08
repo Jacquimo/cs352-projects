@@ -15,6 +15,14 @@ struct Pair {
 struct VariableInstance;
 struct ScriptObject;
 
+struct Result {
+	bool isObject;
+	union {
+		Value value;
+		ScriptObject* obj;
+	};
+};
+
 }
 
 %token <int_val> NUM
@@ -23,7 +31,8 @@ struct ScriptObject;
 %type <string_val> bigOp smallOp emptySpace newlines
 %type <value> expr sum factor term fieldAssign
 %type <fieldVal> field
-%type <obj> fieldlist
+%type <obj> fieldlist objdec
+%type <res> result
 
 %union {
 	char* string_val;
@@ -31,6 +40,7 @@ struct ScriptObject;
 	Value value;
 	Pair fieldVal;
 	ScriptObject* obj;
+	Result* res;
 }
 
 
@@ -237,11 +247,28 @@ varId		: varId DOT ID
 			| ID
 			;
 
+/* "result" rule has type Result* */
 result		: expr
+			{
+				Result* ret = new Result();
+				ret->isObject = false;
+				ret->value = $1;
+				$$ = ret;
+			}
 			| objdec
+			{
+				Result* ret = new Result();
+				ret->isObject = true;
+				ret->obj = $1;
+				$$ = ret;
+			}
 			;
 
+/* "objdec" rule has type ScriptObject* */
 objdec		: OPENCURL newlines fieldlist emptySpace CLOSECURL
+			{
+				$$ = $3;
+			}
 			;
 
 /* "fieldlist" rule has type ScriptObject* */

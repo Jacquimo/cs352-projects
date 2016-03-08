@@ -58,8 +58,16 @@ struct Pair {
 struct VariableInstance;
 struct ScriptObject;
 
+struct Result {
+	bool isObject;
+	union {
+		Value value;
+		ScriptObject* obj;
+	};
+};
 
-#line 63 "y.tab.h" /* yacc.c:1915  */
+
+#line 71 "y.tab.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -123,15 +131,16 @@ struct ScriptObject;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 28 "parser.y" /* yacc.c:1915  */
+#line 37 "parser.y" /* yacc.c:1915  */
 
 	char* string_val;
 	int int_val;
 	Value value;
 	Pair fieldVal;
 	ScriptObject* obj;
+	Result* res;
 
-#line 135 "y.tab.h" /* yacc.c:1915  */
+#line 144 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
