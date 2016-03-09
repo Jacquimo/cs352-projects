@@ -119,8 +119,13 @@ struct Result {
 	};
 };
 
+struct Assign {
+	bool typeFail;
+	Pair* pair;
+};
 
-#line 124 "y.tab.c" /* yacc.c:355  */
+
+#line 129 "y.tab.c" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -184,7 +189,7 @@ struct Result {
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 38 "parser.y" /* yacc.c:355  */
+#line 43 "parser.y" /* yacc.c:355  */
 
 	char* string_val;
 	int int_val;
@@ -192,9 +197,9 @@ union YYSTYPE
 	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
-	bool boolean;
+	Assign* assign;
 
-#line 198 "y.tab.c" /* yacc.c:355  */
+#line 203 "y.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -208,7 +213,7 @@ int yyparse (void);
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
-#line 49 "parser.y" /* yacc.c:358  */
+#line 54 "parser.y" /* yacc.c:358  */
 
 // Include statements and necessary function prototypes
 #include <stdio.h>
@@ -239,7 +244,7 @@ extern int yylineno;
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
-#define VERBOSE false
+#define VERBOSE true
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -356,7 +361,7 @@ void typeError(char* message) {
 }
 
 
-#line 360 "y.tab.c" /* yacc.c:358  */
+#line 365 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -637,11 +642,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   202,   202,   205,   208,   209,   212,   213,   216,   217,
-     223,   224,   228,   227,   237,   252,   264,   310,   332,   369,
-     376,   386,   393,   399,   408,   448,   453,   460,   463,   467,
-     471,   475,   479,   486,   533,   540,   568,   575,   582,   622,
-     632,   636,   643,   647,   654,   655,   659,   660
+       0,   207,   207,   210,   213,   214,   217,   218,   221,   222,
+     228,   229,   233,   232,   242,   257,   279,   331,   353,   390,
+     397,   407,   414,   420,   429,   469,   474,   481,   484,   488,
+     492,   496,   500,   507,   554,   561,   589,   596,   603,   643,
+     653,   657,   664,   668,   675,   676,   680,   681
 };
 #endif
 
@@ -1460,33 +1465,33 @@ yyreduce:
   switch (yyn)
     {
         case 9:
-#line 218 "parser.y" /* yacc.c:1661  */
+#line 223 "parser.y" /* yacc.c:1661  */
     {
 				// check if there is a type error pushed up from the assignment
-				if (!((yyvsp[0].boolean)))
+				if (!((yyvsp[0].assign)))
 					typeError("");
 			}
-#line 1470 "y.tab.c" /* yacc.c:1661  */
+#line 1475 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 12:
-#line 228 "parser.y" /* yacc.c:1661  */
+#line 233 "parser.y" /* yacc.c:1661  */
     {
 				scopeLevel++;
 			}
-#line 1478 "y.tab.c" /* yacc.c:1661  */
+#line 1483 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 13:
-#line 232 "parser.y" /* yacc.c:1661  */
+#line 237 "parser.y" /* yacc.c:1661  */
     {
 				scopeLevel--;
 			}
-#line 1486 "y.tab.c" /* yacc.c:1661  */
+#line 1491 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 14:
-#line 238 "parser.y" /* yacc.c:1661  */
+#line 243 "parser.y" /* yacc.c:1661  */
     {
 				// Only reset symbol table entry if it has not been declared
 				if (symbolTable.find((yyvsp[0].string_val)) == symbolTable.end()) {
@@ -1499,25 +1504,38 @@ yyreduce:
 					vec[vec.size()-1].value.type = WORD_NO_TYPE;
 				}
 
-				(yyval.boolean) = false; // if it's declared, there can't be a type error
+				//$$ = false; // if it's declared, there can't be a type error
 			}
-#line 1505 "y.tab.c" /* yacc.c:1661  */
+#line 1510 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 15:
-#line 253 "parser.y" /* yacc.c:1661  */
+#line 258 "parser.y" /* yacc.c:1661  */
     {
-				(yyval.boolean) = false;
+				Assign* ret = (yyvsp[0].assign);
+				ret->typeFail = false; // with the redeclaration, there cannot be a type error
+
+				// add variable to symbol table if it isn't in there already
+				if (symbolTable.find(ret->pair->name) == symbolTable.end()) {
+					vector<VariableInstance>* vec = new vector<VariableInstance>();
+					vec->push_back(*(ret->pair->instance));
+					symbolTable[*(new string(ret->pair->name))] = *vec;
+				}
+
+				//$$ = ret;
 			}
-#line 1513 "y.tab.c" /* yacc.c:1661  */
+#line 1528 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 16:
-#line 265 "parser.y" /* yacc.c:1661  */
+#line 280 "parser.y" /* yacc.c:1661  */
     {
 				Result* res = (yyvsp[0].res);
 				Pair* pair = (yyvsp[-2].fieldVal);
-				bool ret = false;
+				//bool ret = false;
+				Assign* ret = new Assign();
+				ret->typeFail = false;
+				ret->pair = pair;
 
 				// check if there is a type error for objects
 				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
@@ -1526,9 +1544,11 @@ yyreduce:
 
 				if (obj == NULL) {
 					if (res->isObject) {
-						ret = true;
+						//ret = true;
+						ret->typeFail = true;
+
 						// assign the variable like its an object, in case it's a re-assignment
-						*(pair->instance) = *res->obj;
+						*(pair->instance) = *(res->obj);
 					}
 					else {
 						// the instance must be some kind of scalar
@@ -1536,7 +1556,8 @@ yyreduce:
 					}
 				} else {
 					if (!res->isObject) { // assign the variable like it's a scalar variable
-						ret = true;
+						//ret = true;
+						ret->typeFail = true;
 
 						VariableInstance* var;
 						if (streq(res->value.type, WORD_STRING))
@@ -1553,13 +1574,13 @@ yyreduce:
 
 				// at this point, the Pair object should contain the updated information
 
-				(yyval.boolean) = ret;
+				(yyval.assign) = ret;
 			}
-#line 1559 "y.tab.c" /* yacc.c:1661  */
+#line 1580 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 17:
-#line 311 "parser.y" /* yacc.c:1661  */
+#line 332 "parser.y" /* yacc.c:1661  */
     {
 				// verify that the variable instance is a script object
 				ScriptObject* obj = dynamic_cast<ScriptObject*>((yyvsp[-2].fieldVal)->instance);
@@ -1581,11 +1602,11 @@ yyreduce:
 					(yyval.fieldVal) = ret;
 				}
 			}
-#line 1585 "y.tab.c" /* yacc.c:1661  */
+#line 1606 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 18:
-#line 333 "parser.y" /* yacc.c:1661  */
+#line 354 "parser.y" /* yacc.c:1661  */
     {
 				Pair* ret = new Pair();
 				ret->name = (yyvsp[0].string_val);
@@ -1609,7 +1630,7 @@ yyreduce:
 
 					// verify that variable instance has valid value
 					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
-						typeError("Variable used before value assigned");
+						typeError((char*)(*(new string("Variable '")) + *(new string((yyvsp[0].string_val))) + *(new string("' used before it is declared."))).c_str());
 
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
@@ -1619,61 +1640,61 @@ yyreduce:
 
 				(yyval.fieldVal) = ret;
 			}
-#line 1623 "y.tab.c" /* yacc.c:1661  */
+#line 1644 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 19:
-#line 370 "parser.y" /* yacc.c:1661  */
+#line 391 "parser.y" /* yacc.c:1661  */
     {
 				Result* ret = new Result();
 				ret->isObject = false;
 				ret->value = (yyvsp[0].value);
 				(yyval.res) = ret;
 			}
-#line 1634 "y.tab.c" /* yacc.c:1661  */
+#line 1655 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 20:
-#line 377 "parser.y" /* yacc.c:1661  */
+#line 398 "parser.y" /* yacc.c:1661  */
     {
 				Result* ret = new Result();
 				ret->isObject = true;
 				ret->obj = (yyvsp[0].obj);
 				(yyval.res) = ret;
 			}
-#line 1645 "y.tab.c" /* yacc.c:1661  */
+#line 1666 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 21:
-#line 387 "parser.y" /* yacc.c:1661  */
+#line 408 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.obj) = (yyvsp[-2].obj);
 			}
-#line 1653 "y.tab.c" /* yacc.c:1661  */
+#line 1674 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 22:
-#line 394 "parser.y" /* yacc.c:1661  */
+#line 415 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = (yyvsp[-3].obj);
 				ret->addField((yyvsp[0].fieldVal));
 				(yyval.obj) = ret;
 			}
-#line 1663 "y.tab.c" /* yacc.c:1661  */
+#line 1684 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 23:
-#line 400 "parser.y" /* yacc.c:1661  */
+#line 421 "parser.y" /* yacc.c:1661  */
     {
 				ScriptObject* ret = new ScriptObject();
 				ret->addField((yyvsp[0].fieldVal));
 				(yyval.obj) = ret;
 			}
-#line 1673 "y.tab.c" /* yacc.c:1661  */
+#line 1694 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 24:
-#line 409 "parser.y" /* yacc.c:1661  */
+#line 430 "parser.y" /* yacc.c:1661  */
     {
 				/*
 				Pair* ret = new Pair();
@@ -1710,61 +1731,61 @@ yyreduce:
 					printf("\n");
 				}
 			}
-#line 1714 "y.tab.c" /* yacc.c:1661  */
+#line 1735 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 25:
-#line 449 "parser.y" /* yacc.c:1661  */
+#line 470 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1722 "y.tab.c" /* yacc.c:1661  */
+#line 1743 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 26:
-#line 453 "parser.y" /* yacc.c:1661  */
+#line 474 "parser.y" /* yacc.c:1661  */
     {
 				Value* ret = new Value();
 				ret->type = WORD_NO_TYPE;
 				(yyval.value) = *ret;
 			}
-#line 1732 "y.tab.c" /* yacc.c:1661  */
+#line 1753 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 28:
-#line 464 "parser.y" /* yacc.c:1661  */
+#line 485 "parser.y" /* yacc.c:1661  */
     {
 				writeToDoc((yyvsp[0].value));
 			}
-#line 1740 "y.tab.c" /* yacc.c:1661  */
+#line 1761 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 29:
-#line 468 "parser.y" /* yacc.c:1661  */
+#line 489 "parser.y" /* yacc.c:1661  */
     {
 				writeToDoc((yyvsp[0].value));
 			}
-#line 1748 "y.tab.c" /* yacc.c:1661  */
+#line 1769 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 31:
-#line 476 "parser.y" /* yacc.c:1661  */
+#line 497 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[-1].value);
 			}
-#line 1756 "y.tab.c" /* yacc.c:1661  */
+#line 1777 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 32:
-#line 480 "parser.y" /* yacc.c:1661  */
+#line 501 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1764 "y.tab.c" /* yacc.c:1661  */
+#line 1785 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 33:
-#line 487 "parser.y" /* yacc.c:1661  */
+#line 508 "parser.y" /* yacc.c:1661  */
     {
 				// check that types are the same
 				if (!streq((yyvsp[-2].value).type, (yyvsp[0].value).type))
@@ -1811,19 +1832,19 @@ yyreduce:
 					typeError(UNKNOWN_TYPE_EXPL);
 				}
 			}
-#line 1815 "y.tab.c" /* yacc.c:1661  */
+#line 1836 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 34:
-#line 534 "parser.y" /* yacc.c:1661  */
+#line 555 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1823 "y.tab.c" /* yacc.c:1661  */
+#line 1844 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 35:
-#line 541 "parser.y" /* yacc.c:1661  */
+#line 562 "parser.y" /* yacc.c:1661  */
     {
 				// only integers can use the "*" and "/" operators
 				if (!streq((yyvsp[-2].value).type, WORD_INT) || !streq((yyvsp[0].value).type, WORD_INT))
@@ -1851,35 +1872,35 @@ yyreduce:
 				if (VERBOSE)
 					printf("Line %d,\tFirst = %d,\tSecond = %d,\tOperator: '%c',\tResult = %d\n", yylineno, first, sec, *((yyvsp[-1].string_val)), result);
 			}
-#line 1855 "y.tab.c" /* yacc.c:1661  */
+#line 1876 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 36:
-#line 569 "parser.y" /* yacc.c:1661  */
+#line 590 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.value) = (yyvsp[0].value);
 			}
-#line 1863 "y.tab.c" /* yacc.c:1661  */
+#line 1884 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 37:
-#line 576 "parser.y" /* yacc.c:1661  */
+#line 597 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_INT;
 				val->int_val = (yyvsp[0].int_val);
 				(yyval.value) = *val;
 			}
-#line 1874 "y.tab.c" /* yacc.c:1661  */
+#line 1895 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 38:
-#line 583 "parser.y" /* yacc.c:1661  */
+#line 604 "parser.y" /* yacc.c:1661  */
     {
 				// This ID must represent an already assigned variable, or it's an error
 
 				if (symbolTable.find((yyvsp[0].string_val)) == symbolTable.end() || symbolTable.at((yyvsp[0].string_val)).empty()) {
-					typeError("Variable used before it is declared.");
+					typeError((char*)(*(new string("Variable '")) + *(new string((yyvsp[0].string_val))) + *(new string("' used before it is declared."))).c_str());
 				}
 				else {
 					vector<VariableInstance> vec = symbolTable.at((yyvsp[0].string_val));
@@ -1896,7 +1917,7 @@ yyreduce:
 
 					// verify that variable instance has valid value
 					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
-						typeError("Variable used before value assigned");
+						typeError((char*)(*(new string("Variable '")) + *(new string((yyvsp[0].string_val))) + *(new string("' used before it is declared."))).c_str());
 
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
@@ -1914,54 +1935,54 @@ yyreduce:
 					(yyval.value) = *ret;
 				}
 			}
-#line 1918 "y.tab.c" /* yacc.c:1661  */
+#line 1939 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 39:
-#line 623 "parser.y" /* yacc.c:1661  */
+#line 644 "parser.y" /* yacc.c:1661  */
     {
 				Value* val = new Value();
 				val->type = WORD_STRING;
 				val->string_val = (yyvsp[0].string_val);
 				(yyval.value) = *val;
 			}
-#line 1929 "y.tab.c" /* yacc.c:1661  */
+#line 1950 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 40:
-#line 633 "parser.y" /* yacc.c:1661  */
+#line 654 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1937 "y.tab.c" /* yacc.c:1661  */
+#line 1958 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 41:
-#line 637 "parser.y" /* yacc.c:1661  */
+#line 658 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1945 "y.tab.c" /* yacc.c:1661  */
+#line 1966 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 42:
-#line 644 "parser.y" /* yacc.c:1661  */
+#line 665 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1953 "y.tab.c" /* yacc.c:1661  */
+#line 1974 "y.tab.c" /* yacc.c:1661  */
     break;
 
   case 43:
-#line 648 "parser.y" /* yacc.c:1661  */
+#line 669 "parser.y" /* yacc.c:1661  */
     {
 				(yyval.string_val) = (yyvsp[0].string_val);
 			}
-#line 1961 "y.tab.c" /* yacc.c:1661  */
+#line 1982 "y.tab.c" /* yacc.c:1661  */
     break;
 
 
-#line 1965 "y.tab.c" /* yacc.c:1661  */
+#line 1986 "y.tab.c" /* yacc.c:1661  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2189,7 +2210,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 662 "parser.y" /* yacc.c:1906  */
+#line 683 "parser.y" /* yacc.c:1906  */
 
 
 extern FILE *yyin;

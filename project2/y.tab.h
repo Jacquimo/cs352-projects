@@ -66,8 +66,13 @@ struct Result {
 	};
 };
 
+struct Assign {
+	bool typeFail;
+	Pair* pair;
+};
 
-#line 71 "y.tab.h" /* yacc.c:1915  */
+
+#line 76 "y.tab.h" /* yacc.c:1915  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -131,7 +136,7 @@ struct Result {
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 38 "parser.y" /* yacc.c:1915  */
+#line 43 "parser.y" /* yacc.c:1915  */
 
 	char* string_val;
 	int int_val;
@@ -139,9 +144,9 @@ union YYSTYPE
 	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
-	bool boolean;
+	Assign* assign;
 
-#line 145 "y.tab.h" /* yacc.c:1915  */
+#line 150 "y.tab.h" /* yacc.c:1915  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

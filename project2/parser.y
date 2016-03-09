@@ -23,6 +23,11 @@ struct Result {
 	};
 };
 
+struct Assign {
+	bool typeFail;
+	Pair* pair;
+};
+
 }
 
 %token <int_val> NUM
@@ -33,7 +38,7 @@ struct Result {
 %type <fieldVal> field varId
 %type <obj> fieldlist objdec
 %type <res> result
-%type <boolean> assignment declaration
+%type <assign> assignment
 
 %union {
 	char* string_val;
@@ -42,7 +47,7 @@ struct Result {
 	Pair* fieldVal;
 	ScriptObject* obj;
 	Result* res;
-	bool boolean;
+	Assign* assign;
 }
 
 
@@ -76,7 +81,7 @@ extern int yylineno;
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
-#define VERBOSE false
+#define VERBOSE true
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -247,11 +252,21 @@ declaration	: VAR ID
 					vec[vec.size()-1].value.type = WORD_NO_TYPE;
 				}
 
-				$$ = false; // if it's declared, there can't be a type error
+				//$$ = false; // if it's declared, there can't be a type error
 			}
 			| VAR assignment
 			{
-				$$ = false;
+				Assign* ret = $2;
+				ret->typeFail = false; // with the redeclaration, there cannot be a type error
+
+				// add variable to symbol table if it isn't in there already
+				if (symbolTable.find(ret->pair->name) == symbolTable.end()) {
+					vector<VariableInstance>* vec = new vector<VariableInstance>();
+					vec->push_back(*(ret->pair->instance));
+					symbolTable[*(new string(ret->pair->name))] = *vec;
+				}
+
+				//$$ = ret;
 			}
 			;
 
@@ -265,7 +280,10 @@ assignment	: varId EQUAL result
 			{
 				Result* res = $3;
 				Pair* pair = $1;
-				bool ret = false;
+				//bool ret = false;
+				Assign* ret = new Assign();
+				ret->typeFail = false;
+				ret->pair = pair;
 
 				// check if there is a type error for objects
 				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
@@ -274,9 +292,11 @@ assignment	: varId EQUAL result
 
 				if (obj == NULL) {
 					if (res->isObject) {
-						ret = true;
+						//ret = true;
+						ret->typeFail = true;
+
 						// assign the variable like its an object, in case it's a re-assignment
-						*(pair->instance) = *res->obj;
+						*(pair->instance) = *(res->obj);
 					}
 					else {
 						// the instance must be some kind of scalar
@@ -284,7 +304,8 @@ assignment	: varId EQUAL result
 					}
 				} else {
 					if (!res->isObject) { // assign the variable like it's a scalar variable
-						ret = true;
+						//ret = true;
+						ret->typeFail = true;
 
 						VariableInstance* var;
 						if (streq(res->value.type, WORD_STRING))
@@ -353,7 +374,7 @@ varId		: varId DOT ID
 
 					// verify that variable instance has valid value
 					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
-						typeError("Variable used before value assigned");
+						typeError((char*)(*(new string("Variable '")) + *(new string($1)) + *(new string("' used before it is declared."))).c_str());
 
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
@@ -584,7 +605,7 @@ term		: NUM
 				// This ID must represent an already assigned variable, or it's an error
 
 				if (symbolTable.find($1) == symbolTable.end() || symbolTable.at($1).empty()) {
-					typeError("Variable used before it is declared.");
+					typeError((char*)(*(new string("Variable '")) + *(new string($1)) + *(new string("' used before it is declared."))).c_str());
 				}
 				else {
 					vector<VariableInstance> vec = symbolTable.at($1);
@@ -601,7 +622,7 @@ term		: NUM
 
 					// verify that variable instance has valid value
 					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
-						typeError("Variable used before value assigned");
+						typeError((char*)(*(new string("Variable '")) + *(new string($1)) + *(new string("' used before it is declared."))).c_str());
 
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
