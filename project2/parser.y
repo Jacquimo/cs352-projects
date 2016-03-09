@@ -288,6 +288,8 @@ assignment	: varId EQUAL result
 				// check if there is a type error for objects
 				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
 
+				fprintf(stdout, "before segfault\n"); fflush(stdout);
+
 				// the changes to the variable instance within the pair need to be reimplemented
 
 				if (obj == NULL) {
@@ -558,7 +560,7 @@ sum			: expr smallOp expr
 			;
 
 /* "factor" rule has type Value */
-factor		: factor bigOp factor
+factor		: expr bigOp expr
 			{
 				// only integers can use the "*" and "/" operators
 				if (!streq($1.type, WORD_INT) || !streq($3.type, WORD_INT))

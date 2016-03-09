@@ -3,8 +3,8 @@ Terminals unused in grammar
    ASSIGN
 
 
-State 63 conflicts: 2 shift/reduce
-State 64 conflicts: 2 shift/reduce
+State 63 conflicts: 4 shift/reduce
+State 64 conflicts: 4 shift/reduce
 
 
 Grammar
@@ -63,7 +63,7 @@ Grammar
    32 sum: expr smallOp expr
    33    | factor
 
-   34 factor: factor bigOp factor
+   34 factor: expr bigOp expr
    35       | term
 
    36 term: NUM
@@ -152,11 +152,11 @@ docwrite (43)
 paramList (44)
     on left: 27 28 29, on right: 26 27
 expr (45)
-    on left: 30 31, on right: 18 24 27 28 30 32
+    on left: 30 31, on right: 18 24 27 28 30 32 34
 sum (46)
     on left: 32 33, on right: 31
 factor (47)
-    on left: 34 35, on right: 33 34
+    on left: 34 35, on right: 33
 term (48)
     on left: 36 37 38, on right: 35
 bigOp (49)
@@ -521,13 +521,17 @@ State 35
 
    28 paramList: expr .
    32 sum: expr . smallOp expr
+   34 factor: expr . bigOp expr
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
 
     $default  reduce using rule 28 (paramList)
 
-    smallOp  go to state 54
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 36
@@ -540,14 +544,8 @@ State 36
 State 37
 
    33 sum: factor .
-   34 factor: factor . bigOp factor
-
-    SLASH  shift, and go to state 55
-    MULT   shift, and go to state 56
 
     $default  reduce using rule 33 (sum)
-
-    bigOp  go to state 57
 
 
 State 38
@@ -632,13 +630,17 @@ State 47
 
    18 result: expr .
    32 sum: expr . smallOp expr
+   34 factor: expr . bigOp expr
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
 
     $default  reduce using rule 18 (result)
 
-    smallOp  go to state 54
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 48
@@ -652,12 +654,16 @@ State 49
 
    30 expr: OPENPAREN expr . CLOSEPAREN
    32 sum: expr . smallOp expr
+   34 factor: expr . bigOp expr
 
     PLUS        shift, and go to state 52
     MINUS       shift, and go to state 53
+    SLASH       shift, and go to state 54
+    MULT        shift, and go to state 55
     CLOSEPAREN  shift, and go to state 61
 
-    smallOp  go to state 54
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 50
@@ -698,7 +704,21 @@ State 53
 
 State 54
 
-   32 sum: expr smallOp . expr
+   39 bigOp: SLASH .
+
+    $default  reduce using rule 39 (bigOp)
+
+
+State 55
+
+   40 bigOp: MULT .
+
+    $default  reduce using rule 40 (bigOp)
+
+
+State 56
+
+   34 factor: expr bigOp . expr
 
     NUM        shift, and go to state 30
     ID         shift, and go to state 31
@@ -711,29 +731,18 @@ State 54
     term    go to state 38
 
 
-State 55
-
-   39 bigOp: SLASH .
-
-    $default  reduce using rule 39 (bigOp)
-
-
-State 56
-
-   40 bigOp: MULT .
-
-    $default  reduce using rule 40 (bigOp)
-
-
 State 57
 
-   34 factor: factor bigOp . factor
+   32 sum: expr smallOp . expr
 
-    NUM     shift, and go to state 30
-    ID      shift, and go to state 31
-    STRING  shift, and go to state 32
+    NUM        shift, and go to state 30
+    ID         shift, and go to state 31
+    STRING     shift, and go to state 32
+    OPENPAREN  shift, and go to state 33
 
-    factor  go to state 64
+    expr    go to state 64
+    sum     go to state 36
+    factor  go to state 37
     term    go to state 38
 
 
@@ -774,43 +783,59 @@ State 62
 
    27 paramList: paramList COMMA expr .
    32 sum: expr . smallOp expr
+   34 factor: expr . bigOp expr
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
 
     $default  reduce using rule 27 (paramList)
 
-    smallOp  go to state 54
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 63
 
    32 sum: expr . smallOp expr
-   32    | expr smallOp expr .
+   34 factor: expr . bigOp expr
+   34       | expr bigOp expr .
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
 
-    PLUS      [reduce using rule 32 (sum)]
-    MINUS     [reduce using rule 32 (sum)]
-    $default  reduce using rule 32 (sum)
-
-    smallOp  go to state 54
-
-
-State 64
-
-   34 factor: factor . bigOp factor
-   34       | factor bigOp factor .
-
-    SLASH  shift, and go to state 55
-    MULT   shift, and go to state 56
-
+    PLUS      [reduce using rule 34 (factor)]
+    MINUS     [reduce using rule 34 (factor)]
     SLASH     [reduce using rule 34 (factor)]
     MULT      [reduce using rule 34 (factor)]
     $default  reduce using rule 34 (factor)
 
-    bigOp  go to state 57
+    bigOp    go to state 56
+    smallOp  go to state 57
+
+
+State 64
+
+   32 sum: expr . smallOp expr
+   32    | expr smallOp expr .
+   34 factor: expr . bigOp expr
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
+
+    PLUS      [reduce using rule 32 (sum)]
+    MINUS     [reduce using rule 32 (sum)]
+    SLASH     [reduce using rule 32 (sum)]
+    MULT      [reduce using rule 32 (sum)]
+    $default  reduce using rule 32 (sum)
+
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 65
@@ -904,13 +929,17 @@ State 74
 
    24 fieldAssign: COLON expr .
    32 sum: expr . smallOp expr
+   34 factor: expr . bigOp expr
 
     PLUS   shift, and go to state 52
     MINUS  shift, and go to state 53
+    SLASH  shift, and go to state 54
+    MULT   shift, and go to state 55
 
     $default  reduce using rule 24 (fieldAssign)
 
-    smallOp  go to state 54
+    bigOp    go to state 56
+    smallOp  go to state 57
 
 
 State 75

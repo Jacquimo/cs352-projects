@@ -3,7 +3,7 @@ var two = 2 ; var ten = 10
 var linebreak = "<br 	asdfl;jhkl;gah ;lkasjdflkjaklsgdj klashjasdfASDFASGHASDGKJ-980192785071`5t71871289357978tywe/>"
 
 document.write("two plus ten = ")
-var result = ((two + ten) - ( (12 )))
+var result = ((two + ten) - ( "twenty" * (12 )))
 result = two + ten;
 
 
