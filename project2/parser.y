@@ -375,8 +375,8 @@ varId		: varId DOT ID
 					}
 
 					// verify that variable instance has valid value
-					if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
-						typeError((char*)(*(new string("Variable '")) + *(new string($1)) + *(new string("' used before it is declared."))).c_str());
+					/*if (var == NULL || streq(var->value.type, WORD_NO_TYPE))
+						typeError((char*)(*(new string("Variable '")) + *(new string($1)) + *(new string("' used before it is declared."))).c_str());*/
 
 					if (vec.empty())
 						typeError("Variable used outside of scope.");
