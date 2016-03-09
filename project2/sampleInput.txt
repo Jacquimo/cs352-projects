@@ -1,6 +1,4 @@
 <script type="text/JavaScript">
-var test;
-test = 2;
-
-bad syntax;
+var a = 10;
+document.wrte(a);
 </script>

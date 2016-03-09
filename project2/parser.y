@@ -286,7 +286,7 @@ assignment	: varId EQUAL result
 				ret->pair = pair;
 
 				// check if there is a type error for objects
-				ScriptObject* obj = (ScriptObject*)(pair->instance);
+				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
 
 				//fprintf(stdout, "before segfault\n"); fflush(stdout);
 
@@ -333,9 +333,11 @@ assignment	: varId EQUAL result
 varId		: varId DOT ID
 			{
 				// verify that the variable instance is a script object
+				//ScriptObject* obj = dynamic_cast<ScriptObject*>($1->instance);
 				ScriptObject* obj = (ScriptObject*)($1->instance);
 				if (obj == NULL) {
-					typeError("Non-object variable used as an object.");
+					yyerror("Non-object variable used as an object.");
+					exit(2);
 				} else {
 					// verify that the field exists
 					Pair* ret = NULL;

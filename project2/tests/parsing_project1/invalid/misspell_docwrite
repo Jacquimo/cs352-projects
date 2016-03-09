@@ -1,3 +1,4 @@
 <script type="text/JavaScript">
+var a = 10
 document.wrte(a);
 </script>

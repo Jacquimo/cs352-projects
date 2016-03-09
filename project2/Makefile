@@ -4,7 +4,7 @@ CC=g++
 CFLAGS= -Wno-write-strings
 
 parser:y.tab.c lex.yy.c
-	$(CC) $(CFLAGS) y.tab.c lex.yy.c -o parser -lfl
+	$(CC) $(CFLAGS) -g y.tab.c lex.yy.c -o parser -lfl
 y.tab.c: parser.y
 	bison -y -d -g -t --debug --verbose parser.y
 lex.yy.c: parser.l
