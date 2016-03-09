@@ -285,6 +285,10 @@ assignment	: varId EQUAL result
 				ret->typeFail = false;
 				ret->pair = pair;
 
+				if (VERBOSE)
+					if (!res->isObject && streq(res->value.type, WORD_INT))
+						printf("result val = %d\n", res->value.int_val);
+
 				// check if there is a type error for objects
 				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
 
@@ -333,8 +337,7 @@ assignment	: varId EQUAL result
 varId		: varId DOT ID
 			{
 				// verify that the variable instance is a script object
-				//ScriptObject* obj = dynamic_cast<ScriptObject*>($1->instance);
-				ScriptObject* obj = (ScriptObject*)($1->instance);
+				ScriptObject* obj = dynamic_cast<ScriptObject*>($1->instance);
 				if (obj == NULL) {
 					yyerror("Non-object variable used as an object.");
 					exit(2);
