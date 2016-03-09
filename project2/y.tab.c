@@ -244,7 +244,7 @@ extern int yylineno;
 #define UNKNOWN_TYPE_EXPL "Unknown variable type. Likely programmer error."
 #define BREAKLINE "<br />"
 
-#define VERBOSE true
+#define VERBOSE false
 
 // value arbitrarily chosen; more nested scope has larger value
 #define OUTER_SCOPE 1
@@ -1538,9 +1538,9 @@ yyreduce:
 				ret->pair = pair;
 
 				// check if there is a type error for objects
-				ScriptObject* obj = dynamic_cast<ScriptObject*>(pair->instance);
+				ScriptObject* obj = (ScriptObject*)(pair->instance);
 
-				fprintf(stdout, "before segfault\n"); fflush(stdout);
+				//fprintf(stdout, "before segfault\n"); fflush(stdout);
 
 				// the changes to the variable instance within the pair need to be reimplemented
 
@@ -1585,7 +1585,7 @@ yyreduce:
 #line 334 "parser.y" /* yacc.c:1661  */
     {
 				// verify that the variable instance is a script object
-				ScriptObject* obj = dynamic_cast<ScriptObject*>((yyvsp[-2].fieldVal)->instance);
+				ScriptObject* obj = (ScriptObject*)((yyvsp[-2].fieldVal)->instance);
 				if (obj == NULL) {
 					typeError("Non-object variable used as an object.");
 				} else {
