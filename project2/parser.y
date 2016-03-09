@@ -264,6 +264,8 @@ declaration	: VAR ID
 					vector<VariableInstance>* vec = new vector<VariableInstance>();
 					vec->push_back(*(ret->pair->instance));
 					symbolTable[*(new string(ret->pair->name))] = *vec;
+				} else {
+					
 				}
 
 				//$$ = ret;
