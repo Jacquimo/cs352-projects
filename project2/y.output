@@ -16,7 +16,7 @@ Grammar
     2 closetag: LBRAK SLASH SCRIPT RBRAK
 
     3 statements: action delimiter statements
-    4           | %empty
+    4           | /* empty */
 
     5 delimiter: newlines
     6          | SEMICOLON emptySpace
@@ -26,7 +26,7 @@ Grammar
     9       | docwrite
    10       | scopeChange
 
-   11 $@1: %empty
+   11 $@1: /* empty */
 
    12 scopeChange: OPENCURL newlines $@1 statements CLOSECURL
 
@@ -49,13 +49,13 @@ Grammar
    23 field: ID fieldAssign
 
    24 fieldAssign: COLON expr
-   25            | %empty
+   25            | /* empty */
 
    26 docwrite: DOCWRITE OPENPAREN paramList CLOSEPAREN
 
    27 paramList: paramList COMMA expr
    28          | expr
-   29          | %empty
+   29          | /* empty */
 
    30 expr: OPENPAREN expr CLOSEPAREN
    31     | sum
@@ -77,7 +77,7 @@ Grammar
    42        | MINUS
 
    43 emptySpace: newlines
-   44           | %empty
+   44           | /* empty */
 
    45 newlines: newlines NEWLINE
    46         | NEWLINE

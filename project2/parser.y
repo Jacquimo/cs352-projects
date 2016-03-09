@@ -55,6 +55,7 @@ struct Assign {
 // Include statements and necessary function prototypes
 #include <stdio.h>
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <unordered_map>
 #include <vector>

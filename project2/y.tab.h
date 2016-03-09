@@ -1,19 +1,19 @@
-/* A Bison parser, made by GNU Bison 3.0.  */
+/* A Bison parser, made by GNU Bison 2.7.12-4996.  */
 
 /* Bison interface for Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
-
+   
+      Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -26,13 +26,13 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-
+   
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
-/* Debug traces.  */
+/* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
 #endif
@@ -40,7 +40,8 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "parser.y" /* yacc.c:1915  */
+/* Line 2053 of yacc.c  */
+#line 1 "parser.y"
 
 struct Value {
 	char* type;
@@ -72,38 +73,41 @@ struct Assign {
 };
 
 
-#line 76 "y.tab.h" /* yacc.c:1915  */
 
-/* Token type.  */
+/* Line 2053 of yacc.c  */
+#line 79 "y.tab.h"
+
+/* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
-    NUM = 258,
-    ID = 259,
-    PLUS = 260,
-    MINUS = 261,
-    ASSIGN = 262,
-    SLASH = 263,
-    MULT = 264,
-    EQUAL = 265,
-    NEWLINE = 266,
-    STRING = 267,
-    LBRAK = 268,
-    RBRAK = 269,
-    SCRIPT = 270,
-    OPENTAG = 271,
-    SEMICOLON = 272,
-    OPENPAREN = 273,
-    CLOSEPAREN = 274,
-    VAR = 275,
-    DOCWRITE = 276,
-    COMMA = 277,
-    COLON = 278,
-    OPENCURL = 279,
-    CLOSECURL = 280,
-    DOT = 281
-  };
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     NUM = 258,
+     ID = 259,
+     PLUS = 260,
+     MINUS = 261,
+     ASSIGN = 262,
+     SLASH = 263,
+     MULT = 264,
+     EQUAL = 265,
+     NEWLINE = 266,
+     STRING = 267,
+     LBRAK = 268,
+     RBRAK = 269,
+     SCRIPT = 270,
+     OPENTAG = 271,
+     SEMICOLON = 272,
+     OPENPAREN = 273,
+     CLOSEPAREN = 274,
+     VAR = 275,
+     DOCWRITE = 276,
+     COMMA = 277,
+     COLON = 278,
+     OPENCURL = 279,
+     CLOSECURL = 280,
+     DOT = 281
+   };
 #endif
 /* Tokens.  */
 #define NUM 258
@@ -131,12 +135,13 @@ struct Assign {
 #define CLOSECURL 280
 #define DOT 281
 
-/* Value type.  */
+
+
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
-union YYSTYPE
+typedef union YYSTYPE
 {
-#line 43 "parser.y" /* yacc.c:1915  */
+/* Line 2053 of yacc.c  */
+#line 43 "parser.y"
 
 	char* string_val;
 	int int_val;
@@ -146,15 +151,29 @@ union YYSTYPE
 	Result* res;
 	Assign* assign;
 
-#line 150 "y.tab.h" /* yacc.c:1915  */
-};
+
+/* Line 2053 of yacc.c  */
+#line 157 "y.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
-
 extern YYSTYPE yylval;
 
+#ifdef YYPARSE_PARAM
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void *YYPARSE_PARAM);
+#else
+int yyparse ();
+#endif
+#else /* ! YYPARSE_PARAM */
+#if defined __STDC__ || defined __cplusplus
 int yyparse (void);
+#else
+int yyparse ();
+#endif
+#endif /* ! YYPARSE_PARAM */
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */
